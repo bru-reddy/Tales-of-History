@@ -32,6 +32,10 @@ function HistorySplash({onDone}){
 }
 
 const storyImages={
+ "shiva":"https://commons.wikimedia.org/wiki/Special:FilePath/India_statue_of_nataraja.jpg?width=1200",
+ "ramayana":"https://commons.wikimedia.org/wiki/Special:FilePath/Rama%2C%20Sita%2C%20Lakshmana%2C%20and%20Hanuman.jpg?width=1200",
+ "krishna":"https://commons.wikimedia.org/wiki/Special:FilePath/Image_of_Krishna._Wellcome_M0012571.jpg?width=1200",
+ "mahabharata":"https://commons.wikimedia.org/wiki/Special:FilePath/Arjuna%20and%20His%20Charioteer%20Krishna%20Confront%20Karna.jpg?width=1200",
  "vedic-age":"https://commons.wikimedia.org/wiki/Special:FilePath/Vedic%20Period%20India.jpg?width=1200",
  "buddha":"https://commons.wikimedia.org/wiki/Special:FilePath/Buddha%20in%20Sarnath%20Museum%20-%20Dharmachakra%20Pravartana.jpg?width=1200",
  "jainism":"https://commons.wikimedia.org/wiki/Special:FilePath/Statue%20of%20Mahavira%20at%20Sri%20Mahavirji.jpg?width=1200",
@@ -54,8 +58,6 @@ const storyImages={
  "world-war-ii":"https://commons.wikimedia.org/wiki/Special:FilePath/Normandy%20American%20Cemetery%20and%20Memorial%202.jpg?width=1200",
  "greek-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20from%20west.jpg?width=1200",
  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1200",
- "ramayana":"https://commons.wikimedia.org/wiki/Special:FilePath/Rama%20and%20Sita%20in%20the%20forest.jpg?width=1200",
- "mahabharata":"https://commons.wikimedia.org/wiki/Special:FilePath/Kurukshetra%20war.jpg?width=1200",
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
 const imageFor=(t)=>storyImages[t.slug]||t.image;
