@@ -1,19 +1,3 @@
-import { Router } from "express";
-import { Topic } from "../models.js";
-const router = Router();
-
-router.get("/", async (req,res)=>{
-  const { category, q, era } = req.query;
-  const filter = {};
-  if (category && category !== "All") filter.category = category;
-  if (era && era !== "All") filter.era = era;
-  if (q) filter.$or = [{title:new RegExp(q,"i")},{summary:new RegExp(q,"i")},{tags:new RegExp(q,"i")}];
-  const topics = await Topic.find(filter).sort({startYear:1});
-  res.json(topics);
-});
-router.get("/:slug", async (req,res)=>{
-  const topic = await Topic.findOne({slug:req.params.slug});
-  if (!topic) return res.status(404).json({message:"Topic not found"});
-  res.json(topic);
-});
-export default router;
+import{Router}from"express";import{Topic}from"../models.js";const r=Router();
+r.get("/",async(req,res)=>{const{category,q,era}=req.query,f={};if(category&&category!=="All")f.category=category;if(era&&era!=="All")f.era=era;if(q)f.$or=[{title:new RegExp(q,"i")},{summary:new RegExp(q,"i")},{tags:new RegExp(q,"i")}];res.json(await Topic.find(f).sort({startYear:1}))});
+r.get("/:slug",async(req,res)=>{const t=await Topic.findOne({slug:req.params.slug});if(!t)return res.status(404).json({message:"Topic not found"});res.json(t)});export default r;
