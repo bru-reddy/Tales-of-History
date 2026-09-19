@@ -12,12 +12,16 @@ async function api(p,o={}){
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
 function useSession(){
- const[session,setSession]=useState(null);
- useEffect(()=>{const token=localStorage.getItem("toh_token");if(!token)return;api("/auth/me").then(setSession).catch(()=>{localStorage.removeItem("toh_token");setSession(null)})},[]);
- return session;
+ const[session,setSession]=useState(null),[loading,setLoading]=useState(true);
+ useEffect(()=>{
+  const token=localStorage.getItem("toh_token");
+  if(!token){setLoading(false);return}
+  api("/auth/me").then(setSession).catch(()=>{localStorage.removeItem("toh_token");setSession(null)}).finally(()=>setLoading(false));
+ },[]);
+ return {session,loading};
 }
 function Layout({children}){
- const[open,setOpen]=useState(false),session=useSession();
+ const[open,setOpen]=useState(false),authState=useSession(),session=authState.session;
  const logout=()=>{localStorage.removeItem("toh_token");window.location.href="/"};
  return <div className="app"><header><Link to="/" className="brand"><span className="mark"><Landmark size={19}/></span>The Tales of History</Link><button className="mobileBtn" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav className={open?"open":""}><Link to="/">Explore</Link><Link to="/timeline">Timeline</Link><Link to="/about">About</Link>{session?<><span className="welcome">Hi, {session.user?.name?.split(" ")[0]||"Learner"}</span><button className="signin" onClick={logout}>Sign out</button></>:<Link to="/login" className="signin">Sign in</Link>}</nav></header>{children}<footer><div><b>The Tales of History</b><span>Read the past. Explore the story. Understand the world.</span></div><span>Interactive history & mythology library</span></footer></div>
 }
@@ -44,11 +48,11 @@ const categoryOptions={
  ]};
 
 function Home(){
- const session=useSession(),[showSplash,setShowSplash]=useState(localStorage.getItem("toh_just_signed_in")==="1"),[t,setT]=useState([]),[q,setQ]=useState("");
+ const authState=useSession(),session=authState.session,[showSplash,setShowSplash]=useState(localStorage.getItem("toh_just_signed_in")==="1"),[t,setT]=useState([]),[q,setQ]=useState("");
  useEffect(()=>{api("/topics").then(setT)},[]);
  useEffect(()=>{if(showSplash)localStorage.removeItem("toh_just_signed_in")},[showSplash]);
  const f=t.filter(x=>String(x.title+" "+x.summary+" "+x.category+" "+x.era+" "+(x.tags||[])).toLowerCase().includes(q.toLowerCase()));
- if(showSplash)return <HistorySplash onDone={()=>setShowSplash(false)}/>;
+ if(showSplash)return <HistorySplash onDone={()=>{localStorage.removeItem("toh_just_signed_in");setShowSplash(false)}}/>;
  return <Layout><main>
   <section className="welcomeHero"><div className="eyebrow"><Sparkles size={15}/> YOUR HISTORY JOURNEY</div><h1>Welcome, <em>{session?.user?.name||"Explorer"}.</em></h1><p>Choose a path through the past. Follow a timeline, open a story, and stay as long as curiosity takes you.</p><div className="search"><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search civilizations, events, myths..."/></div></section>
   <section className="section categorySection"><div className="sectionHead"><div><span className="kicker">CHOOSE YOUR PATH</span><h2>Where would you like to begin?</h2></div><span>Explore by world</span></div><div className="categoryGrid">
@@ -61,7 +65,7 @@ function Home(){
 }
 
 function Collection(){
- const{type}=useParams(),[sub,setSub]=useState(""),[topics,setTopics]=useState([]),[loading,setLoading]=useState(true);
+ const{type}=useParams(),[sub,setSub]=useState(""),[era,setEra]=useState(""),[topics,setTopics]=useState([]),[loading,setLoading]=useState(true);
  const isMyth=type==="mythology",options=isMyth?categoryOptions.mythology:categoryOptions.history;
  useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)})},[]);
  const filtered=useMemo(()=>{if(!sub)return[];if(isMyth){const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology"};return topics.filter(t=>t.subcategory===map[sub]||(sub==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary)))}const map={"indian-history":t=>t.subcategory==="Indian History","international-history":t=>t.subcategory==="International History"};return topics.filter(t=>t.category==="History"&&map[sub]?.(t)&&(era?t.era===era||String(t.era).toLowerCase().includes(era.toLowerCase()):true))},[sub,topics,isMyth,era]);
@@ -85,7 +89,7 @@ function Timeline(){
 
 function Login(){
  const nav=useNavigate(),[mode,setMode]=useState("login"),[form,setForm]=useState({name:"",email:"",password:"",confirm:""}),[err,setErr]=useState(""),[busy,setBusy]=useState(false);
- const submit=async e=>{e.preventDefault();setErr("");if(mode==="register"&&form.password!==form.confirm){setErr("Passwords do not match.");return}if(form.password.length<6){setErr("Password must be at least 6 characters.");return}setBusy(true);try{const d=await api("/auth/"+mode,{method:"POST",body:JSON.stringify({name:form.name.trim(),email:form.email.trim(),password:form.password})});localStorage.setItem("toh_token",d.token);localStorage.setItem("toh_just_signed_in","1");nav("/");window.location.reload()}catch(x){setErr(x.message)}finally{setBusy(false)}};
+ const submit=async e=>{e.preventDefault();setErr("");if(mode==="register"&&form.password!==form.confirm){setErr("Passwords do not match.");return}if(form.password.length<6){setErr("Password must be at least 6 characters.");return}setBusy(true);try{const d=await api("/auth/"+mode,{method:"POST",body:JSON.stringify({name:form.name.trim(),email:form.email.trim(),password:form.password})});localStorage.setItem("toh_token",d.token);localStorage.setItem("toh_just_signed_in","1");window.location.assign("/");}catch(x){setErr(x.message)}finally{setBusy(false)}};
  return <Layout><main className="auth"><div className="authCard"><span className="kicker">YOUR LEARNING SPACE</span><h1>{mode==="login"?"Welcome back":"Create your account"}</h1><p>{mode==="login"?"Sign in to continue your learning journey.":"Create an account to save your learning progress."}</p><form onSubmit={submit}>{mode==="register"&&<input required minLength="2" placeholder="Full name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>}<input required type="email" placeholder="Email address" autoComplete="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/><input required minLength="6" type="password" placeholder="Password (6+ characters)" autoComplete={mode==="login"?"current-password":"new-password"} value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>{mode==="register"&&<input required minLength="6" type="password" placeholder="Confirm password" autoComplete="new-password" value={form.confirm} onChange={e=>setForm({...form,confirm:e.target.value})}/>} {err&&<small className="error">{err}</small>}<button className="dark" disabled={busy}>{busy?(mode==="login"?"Signing in…":"Creating account…"):(mode==="login"?"Sign in":"Create account")}</button></form><button className="switch" onClick={()=>{setErr("");setMode(mode==="login"?"register":"login");setForm({name:"",email:form.email,password:"",confirm:""})}}>{mode==="login"?"New here? Create an account":"Already have an account? Sign in"}</button></div></main></Layout>
 }
 function About(){return <Layout><main className="section narrow"><span className="kicker">THE IDEA</span><h1>Learn the past as a connected story.</h1><p className="lead">The Tales of History brings narratives, chronology and contextual learning together in one focused environment.</p><div className="aboutGrid">{["Structured library","Interactive timelines","Storybook reading","Contextual tutor"].map(x=><div className="aboutCard" key={x}><BookOpen/><h3>{x}</h3><p>Designed to make historical learning easier to navigate, revisit and question.</p></div>)}</div></main></Layout>}
