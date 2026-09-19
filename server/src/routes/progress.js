@@ -1,0 +1,3 @@
+import{Router}from"express";import{Progress}from"../models.js";import{auth}from"../auth.js";const r=Router();
+r.get("/",auth,async(req,res)=>res.json(await Progress.find({userId:req.user.id}).populate("topicId")));
+r.post("/",auth,async(req,res)=>{const{topicId,status,minutes=0}=req.body;p=await Progress.findOneAndUpdate({userId:req.user.id,topicId},{userId:req.user.id,topicId,status,minutes:Math.max(0,minutes)},{upsert:true,new:true});res.json(p)});export default r;
