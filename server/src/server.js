@@ -8,23 +8,13 @@ import aiRoutes from "./routes/ai.js";
 import progressRoutes from "./routes/progress.js";
 import { seedDatabase } from "./seed.js";
 
-const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL?.split(",") || true }));
+const app=express();
+app.use(cors({origin:true}));
 app.use(express.json());
-
-app.get("/api/health", (_, res) => res.json({ ok: true, service: "tales-of-history" }));
-app.use("/api/auth", authRoutes);
-app.use("/api/topics", topicRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/progress", progressRoutes);
-
-const port = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGODB_URI)
-  .then(async () => {
-    await seedDatabase();
-    app.listen(port, () => console.log(`Tales of History API running on :${port}`));
-  })
-  .catch(err => {
-    console.error("MongoDB connection failed:", err.message);
-    process.exit(1);
-  });
+app.get("/api/health",(_,res)=>res.json({ok:true,service:"tales-of-history"}));
+app.use("/api/auth",authRoutes);
+app.use("/api/topics",topicRoutes);
+app.use("/api/ai",aiRoutes);
+app.use("/api/progress",progressRoutes);
+const port=process.env.PORT||5000;
+mongoose.connect(process.env.MONGODB_URI).then(async()=>{await seedDatabase();app.listen(port,()=>console.log("Tales of History API on "+port));}).catch(e=>{console.error(e.message);process.exit(1);});
