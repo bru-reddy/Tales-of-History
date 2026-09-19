@@ -3,7 +3,7 @@
 An interactive history and mythology learning platform.
 
 ## Stack
-- React + Vite + Tailwind CSS
+- React + Vite + CSS
 - Node.js + Express
 - MongoDB
 - JWT authentication
@@ -18,4 +18,4 @@ Client: http://localhost:5173
 Server: http://localhost:5000
 
 ## Features
-Authentication, personalized dashboard, history/mythology library, topic search, timelines, visual/documentary resources, contextual AI tutoring, summaries, exam notes, related topics, and progress tracking.
+Authentication, personalized dashboard foundation, history/mythology library, topic search, timelines, visual/documentary resources, contextual AI tutoring, summaries, exam notes, related-topic data, and progress tracking.
