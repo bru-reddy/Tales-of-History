@@ -341,7 +341,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
  const options=isHistory?categoryOptions.history:categoryOptions.mythology;
  const current=options.find(x=>x.slug===slug)||options[0];
  const visual=categoryVisuals[current.slug]||categoryVisuals["international-history"];
- useEffect(()=>{setLoading(true);getTopics().then(d=>{setTopics(d);setLoading(false)}).catch(()=>{setTopics(staticTopics);setLoading(false)})},[slug]);
+ useEffect(()=>{setLoading(true);getTopics().then(d=>{setTopics(d);setLoading(false)}).catch(()=>{setTopics(fallbackTopics);setLoading(false)})},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology","celtic-mythology":"Celtic Mythology"};
  const base=topics.filter(t=>{
   if(isHistory)return t.subcategory===current.title;
