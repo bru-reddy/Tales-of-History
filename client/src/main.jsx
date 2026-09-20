@@ -11,20 +11,9 @@ async function api(p,o={}){
  let d={};try{d=await r.json()}catch{}
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
-function useSession(){
- const[session,setSession]=useState(null),[loading,setLoading]=useState(true);
- useEffect(()=>{
-  const token=localStorage.getItem("toh_token");
-  if(!token){setLoading(false);return}
-  api("/auth/me").then(setSession).catch(()=>{localStorage.removeItem("toh_token");setSession(null)}).finally(()=>setLoading(false));
- },[]);
- return {session,loading};
-}
 function Layout({children}){
- const[open,setOpen]=useState(false),authState=useSession(),session=authState.session;
- const logout=()=>{localStorage.removeItem("toh_token");window.location.href="/"};
- const first=session?.user?.name?.split(" ")[0]||"Explorer";
- return <div className="app"><header className="topHeader"><Link to="/" className="brand brandPro"><span className="mark"><Landmark size={21}/></span><span><b>Tales of History</b><small>Stories That Shaped Our World</small></span></Link><button className="mobileBtn" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav className={"topNav "+(open?"open":"")}><Link to="/">Home</Link><Link to="/collection/history">History</Link><Link to="/collection/mythology">Mythology</Link><Link to="/timeline">Timeline</Link><Link to="/ai">AI Tutor</Link><Link to="/about">About</Link><button className="iconNav"><Search size={20}/></button><button className="iconNav"><Bell size={19}/></button>{session?<div className="profileNav"><span>{first.charAt(0).toUpperCase()}</span><small>Welcome, <b>{first}</b></small><ChevronDown size={15}/></div>:<Link to="/login" className="signin">Sign in</Link>}</nav></header>{children}<footer><div><b>The Tales of History</b><span>Read the past. Explore the story. Understand the world.</span></div><span>Interactive history & mythology library</span></footer></div>
+ const[open,setOpen]=useState(false);
+ return <div className="app"><header className="topHeader"><Link to="/" className="brand brandPro"><span className="mark"><Landmark size={21}/></span><span><b>Tales of History</b><small>Stories That Shaped Our World</small></span></Link><button className="mobileBtn" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav className={"topNav "+(open?"open":"")}><Link to="/">Home</Link><Link to="/collection/history">History</Link><Link to="/collection/mythology">Mythology</Link><Link to="/timeline">Timeline</Link><Link to="/about">About</Link><button className="iconNav" type="button" aria-label="Search"><Search size={20}/></button><button className="iconNav" type="button" aria-label="Notifications"><Bell size={19}/></button></nav></header>{children}<footer><div><b>The Tales of History</b><span>Read the past. Explore the story. Understand the world.</span></div><span>Interactive history & mythology library</span></footer></div>
 }
 function HistorySplash({onDone}){
  useEffect(()=>{const t=setTimeout(onDone,1500);return()=>clearTimeout(t)},[onDone]);
@@ -324,13 +313,12 @@ const topicImageFor=(t,slug)=>{
 };
 
 function Home(){
- const authState=useSession(),session=authState.session,[showSplash,setShowSplash]=useState(localStorage.getItem("toh_just_signed_in")==="1"),[t,setT]=useState([]),[q,setQ]=useState("");
+ const [t,setT]=useState([]),[q,setQ]=useState("");
  useEffect(()=>{api("/topics").then(setT)},[]);
- useEffect(()=>{if(showSplash)localStorage.removeItem("toh_just_signed_in")},[showSplash]);
  const f=t.filter(x=>String(x.title+" "+x.summary+" "+x.category+" "+x.era+" "+(x.tags||[])).toLowerCase().includes(q.toLowerCase()));
  if(showSplash)return <HistorySplash onDone={()=>{localStorage.removeItem("toh_just_signed_in");setShowSplash(false)}}/>;
  return <Layout><main>
-  <section className="welcomeHero"><div className="eyebrow"><Sparkles size={15}/> YOUR HISTORY JOURNEY</div><h1>Welcome, <em>{session?.user?.name||"Explorer"}.</em></h1><p>Choose a path through the past. Follow a timeline, open a story, and stay as long as curiosity takes you.</p><div className="search"><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search civilizations, events, myths..."/></div></section>
+  <section className="welcomeHero"><div className="eyebrow"><Sparkles size={15}/> YOUR HISTORY JOURNEY</div><h1>Explore the stories that shaped our world.</h1><p>Choose a path through the past. Follow a timeline, open a story, and stay as long as curiosity takes you.</p><div className="search"><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search civilizations, events, myths..."/></div></section>
   <section className="section categorySection"><div className="sectionHead"><div><span className="kicker">CHOOSE YOUR PATH</span><h2>Where would you like to begin?</h2></div><span>Explore by world</span></div><div className="categoryGrid">
    <Link className="categoryCard historyCard" to="/collection/history"><div className="categoryIcon"><Landmark/></div><div><span className="label">HISTORY</span><h3>History</h3><p>Indian and international history, organized into eras, timelines and connected stories.</p></div><ChevronRight/></Link>
    <Link className="categoryCard mythologyCard" to="/collection/mythology"><div className="categoryIcon"><Star/></div><div><span className="label">MYTHOLOGY</span><h3>Mythological History</h3><p>Explore mythic traditions from India, Japan, China, Greece, Rome, Macedon, Egypt and the Norse world.</p></div><ChevronRight/></Link>
@@ -353,10 +341,25 @@ function ExplorerPage({kind,slug:forcedSlug}){
  const chips=isHistory
   ?(current.slug==="indian-history"?["All","Indus Valley","Vedic Age","Mahajanapadas","Empires","Philosophy & Religion","Science & Knowledge","Culture & Society"]:["All","Ancient World","Medieval Era","Renaissance","Industrial Age","World Wars","Contemporary","Empires","Culture & Society"])
   :["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
+ const matchesSpecialFilter=(label,hay,t)=>{
+  if(label==="Ancient India")return /vedic|mahajanapada|buddha|jain|gupta|sangam|chola/i.test(hay);
+  if(label==="Medieval India")return /delhi sultanate|vijayanagara|mughal|maratha/i.test(hay);
+  if(label==="Modern India")return /1857|independence|non-cooperation|dandi|quit india|partition|national movement/i.test(hay);
+  if(label==="Ancient World")return /mesopotamia|sumer|egypt|greece|alexander|roman|qin|han|silk road|maya|aztec|inca/i.test(hay);
+  if(label==="Medieval Era")return /crusades|black death/i.test(hay);
+  if(label==="Renaissance")return /renaissance|scientific revolution/i.test(hay);
+  if(label==="Industrial Age")return /industrial|american revolution|french revolution/i.test(hay);
+  if(label==="World Wars")return /world war|wwi|wwii/i.test(hay);
+  if(label==="Contemporary History")return /cold war|space race/i.test(hay);
+  if(label==="Folklore & Legends")return /folklore|folk|legend|spirit|monster|hero/i.test(hay);
+  if(label==="Creation")return /creation|origin|birth|cosmos/i.test(hay);
+  return false;
+ };
  const filtered=base.filter(t=>{
   const hay=(t.title+" "+t.summary+" "+t.era+" "+(t.tags||[]).join(" ")).toLowerCase();
   const matchQ=!q||hay.includes(q.toLowerCase());
   if(active==="All")return matchQ;
+  if(matchesSpecialFilter(active,hay,t))return matchQ;
   const c=active.toLowerCase();
   const matchChip=hay.includes(c)
    ||(active==="Gods & Goddesses"&&/god|goddess|deity|kami/i.test(hay))
@@ -388,7 +391,9 @@ function ExplorerPage({kind,slug:forcedSlug}){
     {section.items.map(([label,target])=>{
       const isCategory=target!=="theme"&&target!=="era";
       const href=isCategory?(isHistory?"/history/"+target:"/mythology/"+target):"#";
-      return <a key={label} href={href} className={"sideOption "+(label===current.title?"active":"")} onClick={e=>{if(!isCategory)e.preventDefault()}}><span className="sideIcon">{isHistory?(si===0?(label.includes("International")?"◉":"♜"):"◌"):"✦"}</span><span>{label}</span></a>
+      return isCategory
+ ? <Link key={label} to={href} className={"sideOption "+(label===current.title?"active":"")}><span className="sideIcon">{isHistory?(si===0?(label.includes("International")?"◉":"♜"):"◌"):"✦"}</span><span>{label}</span></Link>
+ : <button key={label} type="button" className={"sideOption "+(active===label?"active":"")} onClick={()=>setActive(label)}><span className="sideIcon">{isHistory?"◌":"✦"}</span><span>{label}</span></button>
     })}
    </div>)}
    <div className="sideQuote">“{visual.quote}”<b>— Tales of History</b></div>
@@ -428,11 +433,6 @@ function Timeline(){
  return <Layout><main className="section narrow"><span className="kicker">MASTER TIMELINE</span><h1>Walk through the past</h1><p className="lead">Every entry opens the full story in the same window.</p><div className="master">{t.filter(x=>x.startYear).sort((a,b)=>a.startYear-b.startYear).map(x=><Link to={"/topic/"+x.slug} key={x.slug}><span>{x.startYear<0?Math.abs(x.startYear)+" BCE":x.startYear}</span><div><b>{x.title}</b><small>{x.category} · {x.subcategory||x.era}</small></div><span>→</span></Link>)}</div></main></Layout>
 }
 
-function Login(){
- const nav=useNavigate(),[mode,setMode]=useState("login"),[form,setForm]=useState({name:"",email:"",password:"",confirm:""}),[err,setErr]=useState(""),[busy,setBusy]=useState(false);
- const submit=async e=>{e.preventDefault();setErr("");if(mode==="register"&&form.password!==form.confirm){setErr("Passwords do not match.");return}if(form.password.length<6){setErr("Password must be at least 6 characters.");return}setBusy(true);try{const d=await api("/auth/"+mode,{method:"POST",body:JSON.stringify({name:form.name.trim(),email:form.email.trim(),password:form.password})});localStorage.setItem("toh_token",d.token);localStorage.setItem("toh_just_signed_in","1");window.location.assign("/");}catch(x){setErr(x.message)}finally{setBusy(false)}};
- return <Layout><main className="auth"><div className="authCard"><span className="kicker">YOUR LEARNING SPACE</span><h1>{mode==="login"?"Welcome back":"Create your account"}</h1><p>{mode==="login"?"Sign in to continue your learning journey.":"Create an account to save your learning progress."}</p><form onSubmit={submit}>{mode==="register"&&<input required minLength="2" placeholder="Full name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>}<input required type="email" placeholder="Email address" autoComplete="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/><input required minLength="6" type="password" placeholder="Password (6+ characters)" autoComplete={mode==="login"?"current-password":"new-password"} value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>{mode==="register"&&<input required minLength="6" type="password" placeholder="Confirm password" autoComplete="new-password" value={form.confirm} onChange={e=>setForm({...form,confirm:e.target.value})}/>} {err&&<small className="error">{err}</small>}<button className="dark" disabled={busy}>{busy?(mode==="login"?"Signing in…":"Creating account…"):(mode==="login"?"Sign in":"Create account")}</button></form><button className="switch" onClick={()=>{setErr("");setMode(mode==="login"?"register":"login");setForm({name:"",email:form.email,password:"",confirm:""})}}>{mode==="login"?"New here? Create an account":"Already have an account? Sign in"}</button></div></main></Layout>
-}
 function About(){return <Layout><main className="section narrow"><span className="kicker">THE IDEA</span><h1>Learn the past as a connected story.</h1><p className="lead">The Tales of History brings narratives, chronology and contextual learning together in one focused environment.</p><div className="aboutGrid">{["Structured library","Interactive timelines","Storybook reading","Contextual tutor"].map(x=><div className="aboutCard" key={x}><BookOpen/><h3>{x}</h3><p>Designed to make historical learning easier to navigate, revisit and question.</p></div>)}</div></main></Layout>}
 class AppErrorBoundary extends React.Component{
  constructor(props){super(props);this.state={error:null}}
@@ -443,5 +443,5 @@ class AppErrorBoundary extends React.Component{
   return this.props.children;
  }
 }
-function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/history/:slug" element={<ExplorerPage kind="history"/>}/><Route path="/mythology/:slug" element={<ExplorerPage kind="mythology"/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/login" element={<Login/>}/><Route path="/about" element={<About/>}/></Routes>}
+function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/history/:slug" element={<ExplorerPage kind="history"/>}/><Route path="/mythology/:slug" element={<ExplorerPage kind="mythology"/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/about" element={<About/>}/></Routes>}
 createRoot(document.getElementById("root")).render(<AppErrorBoundary><BrowserRouter><App/></BrowserRouter></AppErrorBoundary>);
