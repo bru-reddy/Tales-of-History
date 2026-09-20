@@ -6,8 +6,7 @@ import"./styles.css";
 
 const API=import.meta.env.VITE_API_URL||"http://localhost:5000/api";
 async function api(p,o={}){
- const token=localStorage.getItem("toh_token");
- const r=await fetch(API+p,{...o,headers:{"Content-Type":"application/json",...(token?{"Authorization":"Bearer "+token}:{}),...(o.headers||{})}});
+ const r=await fetch(API+p,{...o,headers:{"Content-Type":"application/json",...(o.headers||{})}});
  let d={};try{d=await r.json()}catch{}
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
