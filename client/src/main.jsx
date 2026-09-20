@@ -3,6 +3,7 @@ import{createRoot}from"react-dom/client";
 import{BrowserRouter,Link,Route,Routes,useNavigate,useParams}from"react-router-dom";
 import{Bell,BookOpen,ChevronDown,ChevronRight,Clock3,Globe2,Landmark,Menu,Search,Sparkles,ScrollText,Shield,Star,UserRound,X}from"lucide-react";
 import"./styles.css";
+import{staticTopics}from"./staticTopics.js";
 
 const API=import.meta.env.VITE_API_URL||"http://localhost:5000/api";
 async function api(p,o={}){
@@ -10,6 +11,8 @@ async function api(p,o={}){
  let d={};try{d=await r.json()}catch{}
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
+async function getTopics(){try{const d=await api("/topics");return Array.isArray(d)&&d.length?d:staticTopics}catch{return staticTopics}}
+async function getTopic(slug){try{return await api("/topics/"+slug)}catch{return staticTopics.find(x=>x.slug===slug)}}
 function Layout({children}){
  const[open,setOpen]=useState(false);
  return <div className="app"><header className="topHeader"><Link to="/" className="brand brandPro"><span className="mark"><Landmark size={21}/></span><span><b>Tales of History</b><small>Stories That Shaped Our World</small></span></Link><button className="mobileBtn" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav className={"topNav "+(open?"open":"")}><Link to="/">Home</Link><Link to="/collection/history">History</Link><Link to="/collection/mythology">Mythology</Link><Link to="/timeline">Timeline</Link><Link to="/about">About</Link><button className="iconNav" type="button" aria-label="Search"><Search size={20}/></button><button className="iconNav" type="button" aria-label="Notifications"><Bell size={19}/></button></nav></header>{children}<footer><div><b>The Tales of History</b><span>Read the past. Explore the story. Understand the world.</span></div><span>Interactive history & mythology library</span></footer></div>
@@ -49,7 +52,7 @@ const storyImages={
  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1200",
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
-const imageFor=(t)=>accurateTopicImages[t.slug]||storyImages[t.slug]||categoryFallbackImages[t.subcategory?.toLowerCase?.()||""]||t.image;
+const imageFor=(t)=>accurateTopicImages[t.slug]||t.image||storyImages[t.slug]||categoryFallbackImages[t.subcategory?.toLowerCase?.()||""]||categoryFallbackImages["international-history"];
 const explorerImages={
 "izanagi-izanami":"https://commons.wikimedia.org/wiki/Special:FilePath/Izanagi_and_Izanami.jpg?width=1200",
 "susanoo-yamata":commons("YamataNoOrochi.jpg"),
@@ -318,7 +321,7 @@ const topicImageFor=(t,slug)=>{
 
 function Home(){
  const [t,setT]=useState([]),[q,setQ]=useState("");
- useEffect(()=>{api("/topics").then(setT)},[]);
+ useEffect(()=>{getTopics().then(setT)},[]);
  const f=t.filter(x=>String(x.title+" "+x.summary+" "+x.category+" "+x.era+" "+(x.tags||[])).toLowerCase().includes(q.toLowerCase()));
  return <Layout><main>
   <section className="welcomeHero"><div className="eyebrow"><Sparkles size={15}/> YOUR HISTORY JOURNEY</div><h1>Explore the stories that shaped our world.</h1><p>Choose a path through the past. Follow a timeline, open a story, and stay as long as curiosity takes you.</p><div className="search"><Search size={18}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search civilizations, events, myths..."/></div></section>
@@ -326,7 +329,7 @@ function Home(){
    <Link className="categoryCard historyCard" to="/collection/history"><div className="categoryIcon"><Landmark/></div><div><span className="label">HISTORY</span><h3>History</h3><p>Indian and international history, organized into eras, timelines and connected stories.</p></div><ChevronRight/></Link>
    <Link className="categoryCard mythologyCard" to="/collection/mythology"><div className="categoryIcon"><Star/></div><div><span className="label">MYTHOLOGY</span><h3>Mythological History</h3><p>Explore mythic traditions from India, Japan, China, Greece, Rome, Macedon, Egypt and the Norse world.</p></div><ChevronRight/></Link>
   </div></section>
-  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
+  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{const fallback=x.image||categoryFallbackImages[x.subcategory]||categoryFallbackImages["international-history"];if(fallback&&e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".35"}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
   <section className="journeyBanner"><div><span className="kicker">READ IT LIKE A STORY</span><h2>Not just facts. A journey through time.</h2><p>Every story has a beginning, turning points, people, consequences and a world around it.</p></div><Link className="pill" to="/timeline"><Clock3 size={16}/> Walk the timeline</Link></section>
  </main></Layout>
 }
@@ -338,7 +341,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
  const options=isHistory?categoryOptions.history:categoryOptions.mythology;
  const current=options.find(x=>x.slug===slug)||options[0];
  const visual=categoryVisuals[current.slug]||categoryVisuals["international-history"];
- useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)}).catch(()=>setLoading(false))},[slug]);
+ useEffect(()=>{setLoading(true);getTopics().then(d=>{setTopics(d);setLoading(false)}).catch(()=>{setTopics(staticTopics);setLoading(false)})},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology","celtic-mythology":"Celtic Mythology"};
  const base=topics.filter(t=>{
   if(isHistory)return t.subcategory===current.title;
@@ -417,7 +420,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
    </section>
    <section className="explorerToolbar"><div className="chipRow">{chips.map(ch=><button className={active===ch?"active":""} onClick={()=>setActive(ch)} key={ch}>{ch}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
    <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {visual.title}</h2></div><span>{topicCount} stories</span></div>
-    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{const fallback=categoryFallbackImages[current.slug]||categoryFallbackImages["international-history"];if(e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".12"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{const fallback=t.image||categoryFallbackImages[current.slug]||categoryFallbackImages["international-history"];if(fallback&&e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".35"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
     {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
    </section>
   </div>
@@ -431,7 +434,7 @@ function Collection(){
 
 function Topic(){
  const{slug}=useParams(),[t,setT]=useState(),[q,setQ]=useState(""),[a,setA]=useState(""),[notes,setNotes]=useState([]);
- useEffect(()=>{api("/topics/"+slug).then(setT)},[slug]);
+ useEffect(()=>{getTopic(slug).then(setT)},[slug]);
  if(!t)return <Layout><div className="loading">Opening story…</div></Layout>;
  const paragraphs=String(t.content||"").split(/\n\n|(?<=\.) (?=[A-Z])/).filter(Boolean);
  const ask=async()=>{if(!q.trim())return;setA((await api("/ai/ask",{method:"POST",body:JSON.stringify({slug,question:q})})).answer)};
