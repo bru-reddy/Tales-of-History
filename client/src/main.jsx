@@ -174,14 +174,14 @@ const commons=(file,width=1200)=>"https://commons.wikimedia.org/wiki/Special:Fil
 
 const accurateTopicImages={
  // Indian History
- "vedic-age":commons("Ancient Indian art.jpg"),
+ "vedic-age":commons("1500-1200 BCE, Rigveda manuscript page sample v, Sanskrit, Devanagari.jpg"),
  "mahajanapadas":commons("Mahajanapadas (c. 500 BCE).png"),
  "buddha":commons("Buddha in Sarnath Museum (Dhammajak Mutra).jpg"),
  "jainism":commons("Statue of Mahavira at Sri Mahavirji.jpg"),
  "gupta-empire":commons("Ajanta Cave 26.jpg"),
- "sangam-age":commons("ANCIENT TAMIL SCRIPTURE.jpg"),
- "chola-empire":commons("Brihadeeswarar Temple full.jpg"),
- "delhi-sultanate":commons("Alai Darwaza, Qutb complex Delhi.jpg"),
+ "sangam-age":commons("Purananuru manuscript.jpg"),
+ "chola-empire":commons("Brihadeeswarar temple.png"),
+ "delhi-sultanate":commons("Alai Darwaza.jpg"),
  "vijayanagara":commons("Vittala Temple Hampi.jpg"),
  "mughal-empire":commons("Taj Mahal in March 2018.jpg"),
  "maratha-confederacy":commons("Shivaji statue.jpg"),
