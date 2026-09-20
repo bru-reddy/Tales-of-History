@@ -3,7 +3,7 @@ import{createRoot}from"react-dom/client";
 import{BrowserRouter,Link,Route,Routes,useNavigate,useParams}from"react-router-dom";
 import{Bell,BookOpen,ChevronDown,ChevronRight,Clock3,Globe2,Landmark,Menu,Search,Sparkles,ScrollText,Shield,Star,UserRound,X}from"lucide-react";
 import"./styles.css";
-import staticTopics from"./staticTopics.js";
+import{staticTopics}from"./staticTopics.js";
 
 const API=import.meta.env.VITE_API_URL||"http://localhost:5000/api";
 async function api(p,o={}){
