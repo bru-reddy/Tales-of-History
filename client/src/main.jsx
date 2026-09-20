@@ -61,6 +61,31 @@ const storyImages={
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
 const imageFor=(t)=>storyImages[t.slug]||t.image;
+const explorerImages={
+"izanagi-izanami":"https://commons.wikimedia.org/wiki/Special:FilePath/Izanagi_and_Izanami.jpg?width=1200",
+"susanoo-yamata":"https://commons.wikimedia.org/wiki/Special:FilePath/Susanoo%20and%20Yamata%20no%20Orochi.jpg?width=1200",
+"amaterasu-cave":"https://commons.wikimedia.org/wiki/Special:FilePath/Amaterasu%20cave.jpg?width=1200",
+"momotaro":"https://commons.wikimedia.org/wiki/Special:FilePath/Momotaro.jpg?width=1200",
+"pangu-nuwa":"https://commons.wikimedia.org/wiki/Special:FilePath/Pangu.jpg?width=1200",
+"chang-e":"https://commons.wikimedia.org/wiki/Special:FilePath/Chang%27e.jpg?width=1200",
+"monkey-king":"https://commons.wikimedia.org/wiki/Special:FilePath/Sun%20Wukong.jpg?width=1200",
+"perseus-medusa":"https://commons.wikimedia.org/wiki/Special:FilePath/Perseus%20with%20the%20Head%20of%20Medusa.jpg?width=1200",
+"orpheus":"https://commons.wikimedia.org/wiki/Special:FilePath/Orpheus%20and%20Eurydice.jpg?width=1200",
+"icarus":"https://commons.wikimedia.org/wiki/Special:FilePath/Icarus.jpg?width=1200",
+"jason-golden-fleece":"https://commons.wikimedia.org/wiki/Special:FilePath/Jason%20and%20the%20Golden%20Fleece.jpg?width=1200",
+"romulus-remus":"https://commons.wikimedia.org/wiki/Special:FilePath/She-wolf%20suckling%20Romulus%20and%20Remus.jpg?width=1200",
+"venus-rome":"https://commons.wikimedia.org/wiki/Special:FilePath/Venus%20and%20Mars%20Pompeii.jpg?width=1200",
+"janus-new-year":"https://commons.wikimedia.org/wiki/Special:FilePath/Janus%20Vatican.jpg?width=1200",
+"thoth":"https://commons.wikimedia.org/wiki/Special:FilePath/Thoth%20Egyptian.jpg?width=1200",
+"anubis":"https://commons.wikimedia.org/wiki/Special:FilePath/Anubis%20Louvre.jpg?width=1200",
+"book-of-dead":"https://commons.wikimedia.org/wiki/Special:FilePath/Papyrus%20of%20Ani.jpg?width=1200",
+"thor-hammer":"https://commons.wikimedia.org/wiki/Special:FilePath/Thor%20with%20Mjolnir.jpg?width=1200",
+"baldur":"https://commons.wikimedia.org/wiki/Special:FilePath/Balder.jpg?width=1200",
+"odin-ravens":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20riding%20Sleipnir.jpg?width=1200",
+"valhalla":"https://commons.wikimedia.org/wiki/Special:FilePath/Valhalla.jpg?width=1200"
+};
+const explorerImageFor=t=>explorerImages[t.slug]||imageFor(t);
+
 
 const categoryOptions={
  history:[
@@ -95,22 +120,67 @@ function Home(){
  </main></Layout>
 }
 
-function MythologyPage(){
- const{slug}=useParams(),[topics,setTopics]=useState([]),[loading,setLoading]=useState(true);
- const option=categoryOptions.mythology.find(x=>x.slug===slug);
- useEffect(()=>{api("/topics").then(d=>{setTopics(d);setLoading(false)})},[]);
+function ExplorerPage({kind,slug:forcedSlug}){
+ const params=useParams(), slug=forcedSlug||params.slug;
+ const [topics,setTopics]=useState([]),[loading,setLoading]=useState(true),[active,setActive]=useState("All"),[q,setQ]=useState("");
+ const isHistory=kind==="history";
+ const options=isHistory?categoryOptions.history:categoryOptions.mythology;
+ const current=options.find(x=>x.slug===slug)||options[0];
+ const historyImage=current.slug==="indian-history"?"https://commons.wikimedia.org/wiki/Special:FilePath/Taj%20Mahal%20in%20March%202018.jpg?width=1800":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1800";
+ const mythImages={
+  "indian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Krishna%20and%20Arjuna%20at%20Kurukshetra.jpg?width=1800",
+  "japanese-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Itsukushima%20Shrine%20Torii.jpg?width=1800",
+  "chinese-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Chinese%20dragon%20painting.jpg?width=1800",
+  "greek-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1800",
+  "roman-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum%20Rome.jpg?width=1800",
+  "macedonian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Vergina%20Sun.jpg?width=1800",
+  "egyptian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Sphinx%20of%20Giza%20and%20Pyramids.jpg?width=1800",
+  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1800"
+ };
+ useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)})},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology"};
- const stories=topics.filter(t=>t.subcategory===map[slug]||(slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary)));
- if(!option)return <Layout><div className="loading">Tradition not found.</div></Layout>;
- return <Layout><main className="collectionPage"><section className="collectionHero mythologyDetailHero"><span className="eyebrow">MYTHOLOGICAL TRADITION</span><h1>{option.title}</h1><p>{option.text}</p></section><section className="section"><Link className="backLink" to="/collection/mythology">← Back to mythologies</Link><div className="sectionHead mythDetailHead"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {option.title}</h2></div><span>{loading?"…":stories.length+" stories"}</span></div><div className="mythStoryGrid">{stories.map(t=><Link className="mythStoryCard" to={"/topic/"+t.slug} key={t.slug}><div className="cardImg"><img src={imageFor(t)} alt={t.title} loading="lazy"/></div><div className="cardBody"><span className="label">{t.era}</span><h3>{t.title}</h3><p>{t.summary}</p><b>Open story →</b></div></Link>)}</div>{!loading&&!stories.length&&<div className="emptyState">More stories for this tradition are being added.</div>}</section></main></Layout>
+ const base=topics.filter(t=>isHistory?t.subcategory===current.title:(t.subcategory===map[current.slug]||(current.slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary))));
+ const chips=isHistory?["All","Ancient","Medieval","Empires","Rulers","Revolutions","Renaissance","Industrial Age","World Wars","Independence","Science & Culture"]:["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
+ const filtered=base.filter(t=>{
+   const hay=(t.title+" "+t.summary+" "+t.era+" "+(t.tags||[]).join(" ")).toLowerCase();
+   const matchQ=!q||hay.includes(q.toLowerCase());
+   let matchChip=true;
+   if(active!=="All"){
+    const c=active.toLowerCase();
+    matchChip=hay.includes(c)||((active==="Gods & Goddesses")&&/god|goddess|deity|kami/i.test(hay))||((active==="Heroes")&&/hero|warrior|king|queen/i.test(hay))||((active==="Folklore")&&/folklore|folk|legend/i.test(hay))||((active==="Demons (Oni)")&&/demon|oni|monster|spirit/i.test(hay))||((active==="Yokai (Spirits)")&&/yokai|spirit|fox|ghost/i.test(hay))||((active==="Empires")&&/empire|dynasty|kingdom/i.test(hay))||((active==="Rulers")&&/king|emperor|queen|ruler/i.test(hay))||((active==="Revolutions")&&/revolution|rebellion|uprising/i.test(hay))||((active==="World Wars")&&/war|world war/i.test(hay))||((active==="Independence")&&/independence|national|colonial/i.test(hay))||((active==="Science & Culture")&&/science|culture|renaissance|printing/i.test(hay));
+   }
+   return matchQ&&matchChip;
+ });
+ const sideOptions=isHistory?categoryOptions.history:categoryOptions.mythology;
+ const heroImage=isHistory?historyImage:(mythImages[current.slug]||"https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1800&q=85");
+ const count=loading?"…":filtered.length;
+ return <Layout><main className="explorer">
+  <aside className="explorerSide">
+   <Link to={isHistory?"/collection/history":"/collection/mythology"} className="sideBack">← {isHistory?"History":"Mythological History"}</Link>
+   <h3>{isHistory?"History Categories":"Mythology Traditions"}</h3>
+   {sideOptions.map(o=><Link key={o.slug} to={(isHistory?"/history/":"/mythology/")+o.slug} className={"sideOption "+(o.slug===current.slug?"active":"")}><span className="sideIcon">{o.icon}</span><span>{o.title}</span></Link>)}
+   {!isHistory&&<><Link to="/mythology/celtic-mythology" className="sideOption"><span className="sideIcon">☘</span><span>Celtic Mythology</span></Link><Link to="/mythology/folklore-legends" className="sideOption"><span className="sideIcon">♧</span><span>Folklore & Legends</span></Link></>}
+   <div className="sideQuote">“In every culture, myths are memories of the human soul.”<b>— Tales of History</b></div>
+  </aside>
+  <div className="explorerMain">
+   <section className="explorerHero" style={{backgroundImage:"linear-gradient(90deg,rgba(15,15,14,.9),rgba(15,15,14,.25)),url("+heroImage+")"}}>
+    <div className="heroCopy"><span>{isHistory?"HISTORICAL HISTORY":"MYTHOLOGICAL HISTORY"}</span><h1>{current.title}</h1><p>{current.text}</p>
+     <div className="heroStats"><span><BookOpen/> {count} Stories</span><span><Landmark/> {isHistory?"Eras & Events":"Gods & Goddesses"}</span><span><ScrollText/> {isHistory?"Archives & Sources":"Folklore & Legends"}</span></div>
+    </div>
+   </section>
+   <section className="explorerToolbar"><div className="chipRow">{chips.map(c=><button className={active===c?"active":""} onClick={()=>setActive(c)} key={c}>{c}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
+   <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {current.title}</h2></div><span>{count} stories</span></div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={explorerImageFor(t)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".15"}}/><span className="cardBadge">{isHistory?t.era:t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+    {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
+   </section>
+  </div>
+ </main></Layout>
 }
 
 function Collection(){
- const{type}=useParams(),[sub,setSub]=useState(""),[era,setEra]=useState(""),[topics,setTopics]=useState([]),[loading,setLoading]=useState(true);
- const isMyth=type==="mythology",options=isMyth?categoryOptions.mythology:categoryOptions.history;
- useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)})},[]);
- const filtered=useMemo(()=>{if(!sub)return[];if(isMyth){const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology"};return topics.filter(t=>t.subcategory===map[sub]||(sub==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary)))}const map={"indian-history":t=>t.subcategory==="Indian History","international-history":t=>t.subcategory==="International History"};const matchesEra=t=>{const y=Number(t.startYear);if(!Number.isFinite(y))return false;if(sub==="indian-history"){if(era==="Ancient India")return y<700;if(era==="Medieval India")return y>=700&&y<1750;if(era==="Modern India")return y>=1750;return false}if(era==="Ancient Civilizations")return y<500;if(era==="Medieval Era")return y>=500&&y<1400;if(era==="Renaissance")return y>=1400&&y<1700;if(era==="Industrial Age")return y>=1700&&y<1914;if(era==="World Wars")return y>=1914&&y<=1945;if(era==="Contemporary History")return y>1945;return false};return topics.filter(t=>t.category==="History"&&map[sub]?.(t)&&matchesEra(t))},[sub,topics,isMyth,era]);
- return <Layout><main className="collectionPage"><section className="collectionHero"><span className="eyebrow">{isMyth?"MYTHOLOGICAL TRADITIONS":"HISTORY THROUGH TIME"}</span><h1>{isMyth?"Choose a mythology":"Choose a history path"}</h1><p>{isMyth?"Explore each tradition as its own world of characters, beliefs, symbols and stories.":"Move from ancient worlds to modern turning points through organized historical paths."}</p></section><section className="section"><div className="optionGrid">{options.map(o=>isMyth?<Link className="optionCard" to={"/mythology/"+o.slug} key={o.slug}><span className="optionGlyph">{o.icon}</span><div><span className="label">MYTHOLOGY</span><h3>{o.title}</h3><p>{o.text}</p></div><ChevronRight/></Link>:<button className={"optionCard "+(sub===o.slug?"selected":"")} onClick={()=>{setSub(o.slug);setEra("")}} key={o.slug}><span className="optionGlyph">{o.icon}</span><div><span className="label">{isMyth?"MYTHOLOGY":"HISTORY"}</span><h3>{o.title}</h3><p>{o.text}</p></div><ChevronRight/></button>)}</div></section>{!isMyth&&sub&&<section className="section eraSection"><span className="kicker">NARROW THE JOURNEY</span><h2>{sub==="indian-history"?"Indian History":"International History"} by era</h2><div className="eraChips">{options.find(o=>o.slug===sub)?.items.map(e=><button className={era===e?"active":""} key={e} onClick={()=>setEra(era===e?"":e)}>{e}</button>)}</div><p className="eraHint">{era?"Stories for this era are shown below.":"Select an era to open its timeline and stories."}</p></section>}<section className="section storySection">{sub&&era&&<><div className="sectionHead"><div><span className="kicker">STORY COLLECTION</span><h2>{options.find(o=>o.slug===sub)?.title} · {era}</h2></div><span>{loading?"…":filtered.length+" stories"}</span></div><div className="timelineRail">{filtered.sort((a,b)=>(a.startYear||0)-(b.startYear||0)).map(t=><Link className="storyRow" to={"/topic/"+t.slug} key={t.slug}><span className="storyYear">{t.startYear<0?Math.abs(t.startYear)+" BCE":t.startYear||"—"}</span><div><h3>{t.title}</h3><p>{t.summary}</p></div><span className="storyArrow">Open story <ChevronRight size={17}/></span></Link>)}</div>{!loading&&!filtered.length&&<div className="emptyState">No stories are currently tagged to this era. More are being added.</div>}</>}</section></main></Layout>
+ const{type}=useParams(),isMyth=type==="mythology";
+ const options=isMyth?categoryOptions.mythology:categoryOptions.history;
+ return <Layout><main className="collectionChooser"><section className="chooserHero"><span className="eyebrow">{isMyth?"MYTHOLOGICAL HISTORY":"HISTORY"}</span><h1>{isMyth?"Choose a mythology":"Choose a history category"}</h1><p>{isMyth?"Enter a complete tradition and explore its gods, heroes, monsters, demons, spirits and folklore.":"Enter a historical world and explore it through richly illustrated stories, timelines and sources."}</p></section><section className="chooserGrid">{options.map(o=><Link className="chooserCard" to={(isMyth?"/mythology/":"/history/")+o.slug} key={o.slug}><span className="chooserIcon">{o.icon}</span><div><span className="label">{isMyth?"MYTHOLOGY":"HISTORY"}</span><h2>{o.title}</h2><p>{o.text}</p></div><ChevronRight/></Link>)}</section></main></Layout>
 }
 
 function Topic(){
@@ -134,5 +204,5 @@ function Login(){
  return <Layout><main className="auth"><div className="authCard"><span className="kicker">YOUR LEARNING SPACE</span><h1>{mode==="login"?"Welcome back":"Create your account"}</h1><p>{mode==="login"?"Sign in to continue your learning journey.":"Create an account to save your learning progress."}</p><form onSubmit={submit}>{mode==="register"&&<input required minLength="2" placeholder="Full name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>}<input required type="email" placeholder="Email address" autoComplete="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/><input required minLength="6" type="password" placeholder="Password (6+ characters)" autoComplete={mode==="login"?"current-password":"new-password"} value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>{mode==="register"&&<input required minLength="6" type="password" placeholder="Confirm password" autoComplete="new-password" value={form.confirm} onChange={e=>setForm({...form,confirm:e.target.value})}/>} {err&&<small className="error">{err}</small>}<button className="dark" disabled={busy}>{busy?(mode==="login"?"Signing in…":"Creating account…"):(mode==="login"?"Sign in":"Create account")}</button></form><button className="switch" onClick={()=>{setErr("");setMode(mode==="login"?"register":"login");setForm({name:"",email:form.email,password:"",confirm:""})}}>{mode==="login"?"New here? Create an account":"Already have an account? Sign in"}</button></div></main></Layout>
 }
 function About(){return <Layout><main className="section narrow"><span className="kicker">THE IDEA</span><h1>Learn the past as a connected story.</h1><p className="lead">The Tales of History brings narratives, chronology and contextual learning together in one focused environment.</p><div className="aboutGrid">{["Structured library","Interactive timelines","Storybook reading","Contextual tutor"].map(x=><div className="aboutCard" key={x}><BookOpen/><h3>{x}</h3><p>Designed to make historical learning easier to navigate, revisit and question.</p></div>)}</div></main></Layout>}
-function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/mythology/:slug" element={<MythologyPage/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/login" element={<Login/>}/><Route path="/about" element={<About/>}/></Routes>}
+function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/history/:slug" element={<ExplorerPage kind="history"/>}/><Route path="/mythology/:slug" element={<ExplorerPage kind="mythology"/>}/><Route path="/mythology/:slug" element={<MythologyPage/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/login" element={<Login/>}/><Route path="/about" element={<About/>}/></Routes>}
 createRoot(document.getElementById("root")).render(<BrowserRouter><App/></BrowserRouter>);
