@@ -266,5 +266,5 @@ class AppErrorBoundary extends React.Component{
   return this.props.children;
  }
 }
-function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/history/:slug" element={<ExplorerPage kind="history"/>}/><Route path="/mythology/:slug" element={<ExplorerPage kind="mythology"/>}/><Route path="/mythology/:slug" element={<MythologyPage/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/login" element={<Login/>}/><Route path="/about" element={<About/>}/></Routes>}
+function App(){return <Routes><Route path="/" element={<Home/>}/><Route path="/collection/:type" element={<Collection/>}/><Route path="/history/:slug" element={<ExplorerPage kind="history"/>}/><Route path="/mythology/:slug" element={<ExplorerPage kind="mythology"/>}/><Route path="/topic/:slug" element={<Topic/>}/><Route path="/timeline" element={<Timeline/>}/><Route path="/login" element={<Login/>}/><Route path="/about" element={<About/>}/></Routes>}
 createRoot(document.getElementById("root")).render(<AppErrorBoundary><BrowserRouter><App/></BrowserRouter></AppErrorBoundary>);
