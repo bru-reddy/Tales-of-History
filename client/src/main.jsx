@@ -156,6 +156,65 @@ const categoryOptions={
   {slug:"folklore-legends",title:"Folklore & Legends",icon:"♧",text:"Legendary heroes, spirits, monsters, tricksters and folk traditions from around the world."}
  ]};
 
+
+const categoryVisuals={
+ "indian-history":{
+  eyebrow:"INDIAN HISTORY",title:"Ancient India",
+  text:"Explore the dawn of one of the world's oldest civilizations — from the Indus Valley and the Vedic Age to the rise of great empires, religions, and ideas that shaped the Indian subcontinent.",
+  hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Vittala%20Temple%20Hampi.jpg?width=1800",
+  statLabels:["Great Civilizations","Philosophy & Religion","Culture & Society"],
+  quote:"In the soil of ancient India lie the roots of a timeless civilization."
+ },
+ "international-history":{
+  eyebrow:"WORLD HISTORY",title:"International History",
+  text:"Explore the rise and fall of civilizations, revolutions, wars, discoveries and the ideas that shaped our world. From ancient empires to the modern age, these are the stories of humanity.",
+  hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Colosseum%20in%20Rome%2C%20Italy%20-%20April%202008.jpg?width=1800",
+  statLabels:["Ancient Civilizations","Empires & Kingdoms","Ideas & Revolutions","World at War"],
+  quote:"Different lands, one human story."
+ },
+ "japanese-mythology":{eyebrow:"JAPANESE MYTHOLOGY",title:"Japanese Mythology",text:"Explore creation myths, kami, heroic legends and supernatural traditions from Japan's ancient chronicles and folklore.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Itsukushima%20Shrine%20Torii.jpg?width=1800",statLabels:["Creation & Kami","Heroes & Legends","Spirits & Folklore"],quote:"Stories of kami, heroes and the spirit world."},
+ "chinese-mythology":{eyebrow:"CHINESE MYTHOLOGY",title:"Chinese Mythology",text:"Enter a world of creation stories, immortals, legendary rulers, dragons, heroes and enduring folklore.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Forbidden%20City%20Beijing.jpg?width=1800",statLabels:["Creation & Immortals","Heroes & Legends","Folklore & Spirits"],quote:"A mythic world shaped by heaven, earth and humanity."},
+ "greek-mythology":{eyebrow:"GREEK MYTHOLOGY",title:"Greek Mythology",text:"Explore Olympian gods, heroes, monsters and epic journeys through the stories that shaped Greek cultural imagination.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1800",statLabels:["Gods & Goddesses","Heroes & Monsters","Love & Tragedy"],quote:"Gods, heroes and monsters beneath the Mediterranean sun."},
+ "roman-mythology":{eyebrow:"ROMAN MYTHOLOGY",title:"Roman Mythology",text:"Discover Roman gods, founding legends, sacred traditions and stories shaped by the religious culture of Rome.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum%20Rome%20September%202014%2002.jpg?width=1800",statLabels:["Gods & Religion","Founding Legends","Heroes & Traditions"],quote:"Myths that travelled with Rome."},
+ "macedonian-mythology":{eyebrow:"MACEDONIAN MYTHOLOGY",title:"Macedonian Mythology",text:"Explore ancient Macedonian religious traditions, legendary figures and the mythic world surrounding Macedon and its wider Greek cultural setting.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Vergina%20Sun.jpg?width=1800",statLabels:["Gods & Rituals","Heroes & Legends","Macedon & Greece"],quote:"Legends from the crossroads of the ancient world."},
+ "egyptian-mythology":{eyebrow:"EGYPTIAN MYTHOLOGY",title:"Egyptian Mythology",text:"Journey through the cosmology of ancient Egypt, from Ra, Osiris and Isis to Horus, Anubis and the world of the afterlife.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Sphinx%20of%20Giza%20and%20Pyramids.jpg?width=1800",statLabels:["Gods & Goddesses","Creation & Cosmos","Death & Afterlife"],quote:"Where gods, kings and the afterlife meet."},
+ "norse-mythology":{eyebrow:"NORSE MYTHOLOGY",title:"Norse Mythology",text:"Enter the world of Odin, Thor, Loki, Yggdrasil, Valhalla and Ragnarök through Scandinavian mythic traditions.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1800",statLabels:["Gods & Giants","Heroes & Sagas","Ragnarök & Fate"],quote:"A world suspended between gods, giants and fate."},
+ "celtic-mythology":{eyebrow:"CELTIC MYTHOLOGY",title:"Celtic Mythology",text:"Explore Celtic gods, heroes, fae, sacred places and folklore from Ireland, Britain and related traditions.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Newgrange%20Ireland.jpg?width=1800",statLabels:["Gods & Heroes","Fae & Spirits","Sacred Places"],quote:"Where legend lives in landscape and memory."},
+ "folklore-legends":{eyebrow:"FOLKLORE & LEGENDS",title:"Folklore & Legends",text:"Discover legendary heroes, spirits, monsters, tricksters and folk traditions passed between generations around the world.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Cliffs%20of%20Moher.jpg?width=1800",statLabels:["Heroes & Tricksters","Spirits & Monsters","Folk Traditions"],quote:"Every generation leaves a story behind."}
+};
+const categoryCardImages={
+ "indian-history":[storyImages["chola-empire"],storyImages["vedic-age"],storyImages["mahabharata"],storyImages["buddha"],storyImages["jainism"],storyImages["vijayanagara"]],
+ "international-history":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Ziggurat%20of%20Ur.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/All%20Gizah%20Pyramids.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Persepolis.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20the%20Great%20mosaic.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Wall%20of%20Han%20Dynasty.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Chichen%20Itz%C3%A1%20Pyramide.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Angkor%20Wat.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Stonehenge%20at%20sunset.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Knights%20of%20the%20Holy%20Ghost%20embarking%20on%20the%20crusades.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Mona%20Lisa%2C%20by%20Leonardo%20da%20Vinci%2C%20from%20C2RMF%20retouched.jpg?width=1200"
+ ],
+ "japanese-mythology":[explorerImages["izanagi-izanami"],explorerImages["susanoo-yamata"],explorerImages["amaterasu-cave"],explorerImages["momotaro"],categoryImagePools["Japanese Mythology"][0],categoryImagePools["Japanese Mythology"][1]],
+ "chinese-mythology":[explorerImages["pangu-nuwa"],explorerImages["chang-e"],explorerImages["monkey-king"],categoryImagePools["Chinese Mythology"][0],categoryImagePools["Chinese Mythology"][1],categoryImagePools["Chinese Mythology"][2]],
+ "greek-mythology":[explorerImages["perseus-medusa"],explorerImages["orpheus"],explorerImages["icarus"],explorerImages["jason-golden-fleece"],categoryImagePools["Greek Mythology"][0],categoryImagePools["Greek Mythology"][1]],
+ "roman-mythology":[explorerImages["romulus-remus"],explorerImages["venus-rome"],explorerImages["janus-new-year"],categoryImagePools["Roman Mythology"][0],categoryImagePools["Roman Mythology"][1],categoryImagePools["Roman Mythology"][2]],
+ "macedonian-mythology":[storyImages["alexander"],categoryImagePools["Macedonian Mythology"][0],categoryImagePools["Macedonian Mythology"][1],categoryImagePools["Macedonian Mythology"][2]],
+ "egyptian-mythology":[explorerImages["thoth"],explorerImages["anubis"],explorerImages["book-of-dead"],categoryImagePools["Egyptian Mythology"][0],categoryImagePools["Egyptian Mythology"][1],categoryImagePools["Egyptian Mythology"][2]],
+ "norse-mythology":[explorerImages["thor-hammer"],explorerImages["baldur"],explorerImages["odin-ravens"],explorerImages["valhalla"],categoryImagePools["Norse Mythology"][0],categoryImagePools["Norse Mythology"][1]],
+ "celtic-mythology":[categoryImagePools["Celtic Mythology"][0],categoryImagePools["Celtic Mythology"][1],categoryImagePools["Celtic Mythology"][2],storyImages["greek-mythology"],storyImages["norse-mythology"]],
+ "folklore-legends":[storyImages["greek-mythology"],storyImages["norse-mythology"],storyImages["egypt-osiris"],categoryImagePools["Celtic Mythology"][0],categoryImagePools["Greek Mythology"][2]]
+};
+const topicImageFor=(t,slug)=>{
+ const explicit=explorerImages[t.slug];
+ if(explicit)return explicit;
+ const pool=categoryCardImages[slug]||categoryCardImages["international-history"];
+ return pool[Math.abs(String(t.slug||t.title||"").split("").reduce((a,ch)=>a+ch.charCodeAt(0),0))%pool.length];
+};
+
 function Home(){
  const authState=useSession(),session=authState.session,[showSplash,setShowSplash]=useState(localStorage.getItem("toh_just_signed_in")==="1"),[t,setT]=useState([]),[q,setQ]=useState("");
  useEffect(()=>{api("/topics").then(setT)},[]);
@@ -174,62 +233,70 @@ function Home(){
 }
 
 function ExplorerPage({kind,slug:forcedSlug}){
- const params=useParams(), slug=forcedSlug||params.slug;
+ const params=useParams(),slug=forcedSlug||params.slug;
  const [topics,setTopics]=useState([]),[loading,setLoading]=useState(true),[active,setActive]=useState("All"),[q,setQ]=useState("");
  const isHistory=kind==="history";
  const options=isHistory?categoryOptions.history:categoryOptions.mythology;
  const current=options.find(x=>x.slug===slug)||options[0];
- const historyImage=current.slug==="indian-history"?"https://commons.wikimedia.org/wiki/Special:FilePath/Taj%20Mahal%20in%20March%202018.jpg?width=1800":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1800";
- const mythImages={
-  "indian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Krishna%20and%20Arjuna%20at%20Kurukshetra.jpg?width=1800",
-  "japanese-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Itsukushima%20Shrine%20Torii.jpg?width=1800",
-  "chinese-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Chinese%20dragon%20painting.jpg?width=1800",
-  "greek-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1800",
-  "roman-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum%20Rome.jpg?width=1800",
-  "macedonian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Vergina%20Sun.jpg?width=1800",
-  "egyptian-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Sphinx%20of%20Giza%20and%20Pyramids.jpg?width=1800",
-  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1800"
- };
- useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)})},[slug]);
+ const visual=categoryVisuals[current.slug]||categoryVisuals["international-history"];
+ useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)}).catch(()=>setLoading(false))},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology","celtic-mythology":"Celtic Mythology"};
  const base=topics.filter(t=>isHistory?t.subcategory===current.title:(current.slug==="folklore-legends"?t.category==="Mythology":t.subcategory===map[current.slug]||(current.slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary))));
- const chips=isHistory?["All","Ancient","Medieval","Empires","Rulers","Revolutions","Renaissance","Industrial Age","World Wars","Independence","Science & Culture"]:["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
+ const chips=isHistory
+  ?(current.slug==="indian-history"?["All","Indus Valley","Vedic Age","Mahajanapadas","Empires","Philosophy & Religion","Science & Knowledge","Culture & Society"]:["All","Ancient World","Medieval Era","Renaissance","Industrial Age","World Wars","Contemporary","Empires","Culture & Society"])
+  :["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
  const filtered=base.filter(t=>{
-   const hay=(t.title+" "+t.summary+" "+t.era+" "+(t.tags||[]).join(" ")).toLowerCase();
-   const matchQ=!q||hay.includes(q.toLowerCase());
-   let matchChip=true;
-   if(active!=="All"){
-    const c=active.toLowerCase();
-    matchChip=hay.includes(c)||((active==="Gods & Goddesses")&&/god|goddess|deity|kami/i.test(hay))||((active==="Heroes")&&/hero|warrior|king|queen/i.test(hay))||((active==="Folklore")&&/folklore|folk|legend/i.test(hay))||((active==="Demons (Oni)")&&/demon|oni|monster|spirit/i.test(hay))||((active==="Yokai (Spirits)")&&/yokai|spirit|fox|ghost/i.test(hay))||((active==="Empires")&&/empire|dynasty|kingdom/i.test(hay))||((active==="Rulers")&&/king|emperor|queen|ruler/i.test(hay))||((active==="Revolutions")&&/revolution|rebellion|uprising/i.test(hay))||((active==="World Wars")&&/war|world war/i.test(hay))||((active==="Independence")&&/independence|national|colonial/i.test(hay))||((active==="Science & Culture")&&/science|culture|renaissance|printing/i.test(hay));
-   }
-   return matchQ&&matchChip;
+  const hay=(t.title+" "+t.summary+" "+t.era+" "+(t.tags||[]).join(" ")).toLowerCase();
+  const matchQ=!q||hay.includes(q.toLowerCase());
+  if(active==="All")return matchQ;
+  const c=active.toLowerCase();
+  const matchChip=hay.includes(c)
+   ||(active==="Gods & Goddesses"&&/god|goddess|deity|kami/i.test(hay))
+   ||(active==="Heroes"&&/hero|warrior|king|queen/i.test(hay))
+   ||(active==="Folklore"&&/folklore|folk|legend/i.test(hay))
+   ||(active==="Demons (Oni)"&&/demon|oni|monster|spirit/i.test(hay))
+   ||(active==="Yokai (Spirits)"&&/yokai|spirit|fox|ghost/i.test(hay))
+   ||(active==="Empires"&&/empire|dynasty|kingdom/i.test(hay))
+   ||(active==="Rulers"&&/king|emperor|queen|ruler/i.test(hay))
+   ||(active==="Revolutions"&&/revolution|rebellion|uprising/i.test(hay))
+   ||(active==="World Wars"&&/war|world war/i.test(hay))
+   ||(active==="Independence"&&/independence|national|colonial/i.test(hay))
+   ||(active==="Science & Knowledge"&&/science|culture|renaissance|printing|knowledge/i.test(hay));
+  return matchQ&&matchChip;
  });
- const sideOptions=isHistory?categoryOptions.history:categoryOptions.mythology;
- const heroImage=isHistory?historyImage:(mythImages[current.slug]||"https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1800&q=85");
- const count=loading?"…":filtered.length;
+ const sidebarItems=isHistory
+  ?(current.slug==="indian-history"
+    ?[{heading:"Indian History",items:[["Ancient India","indian-history"],["Medieval India","indian-history"],["Modern India","indian-history"]]}]
+    :[{heading:"History Categories",items:categoryOptions.history.map(o=>[o.title,o.slug])},{heading:"Explore by Era",items:[["Ancient World","ancient"],["Medieval Era","medieval"],["Renaissance","renaissance"],["Industrial Age","industrial"],["World Wars","wars"],["Contemporary History","contemporary"]]}])
+  :[{heading:"Mythology Traditions",items:categoryOptions.mythology.map(o=>[o.title,o.slug])},{heading:"Explore by Theme",items:[["Creation","theme"],["Gods & Goddesses","theme"],["Heroes","theme"],["Folklore & Legends","theme"]]}];
+ const topicCount=loading?"…":filtered.length;
  return <Layout><main className="explorer">
   <aside className="explorerSide">
-   <Link to={isHistory?"/collection/history":"/collection/mythology"} className="sideBack">← {isHistory?"History":"Mythological History"}</Link>
-   <h3>{isHistory?"History Categories":"Mythology Traditions"}</h3>
-   {sideOptions.map(o=><Link key={o.slug} to={(isHistory?"/history/":"/mythology/")+o.slug} className={"sideOption "+(o.slug===current.slug?"active":"")}><span className="sideIcon">{o.icon}</span><span>{o.title}</span></Link>)}
-   {!isHistory&&<><Link to="/mythology/celtic-mythology" className="sideOption"><span className="sideIcon">☘</span><span>Celtic Mythology</span></Link><Link to="/mythology/folklore-legends" className="sideOption"><span className="sideIcon">♧</span><span>Folklore & Legends</span></Link></>}
-   <div className="sideQuote">“In every culture, myths are memories of the human soul.”<b>— Tales of History</b></div>
+   <Link to={isHistory?"/collection/history":"/collection/mythology"} className="sideBack">← {isHistory?"Back to History":"Back to Mythology"}</Link>
+   {sidebarItems.map((section,si)=><div className="sideSection" key={section.heading}>
+    <h3>{section.heading}</h3>
+    {section.items.map(([label,target])=>{
+      const isCategory=target!=="theme"&&target!=="ancient"&&target!=="medieval"&&target!=="renaissance"&&target!=="industrial"&&target!=="wars"&&target!=="contemporary";
+      const href=isCategory?(isHistory?"/history/"+target:"/mythology/"+target):"#";
+      return <a key={label} href={href} className={"sideOption "+(label===current.title?"active":"")} onClick={e=>{if(!isCategory)e.preventDefault()}}><span className="sideIcon">{isHistory?(si===0?(label.includes("International")?"◉":"♜"):"◌"):"✦"}</span><span>{label}</span></a>
+    })}
+   </div>)}
+   <div className="sideQuote">“{visual.quote}”<b>— Tales of History</b></div>
   </aside>
   <div className="explorerMain">
-   <section className="explorerHero" style={{backgroundImage:"linear-gradient(90deg,rgba(15,15,14,.9),rgba(15,15,14,.25)),url("+heroImage+")"}}>
-    <div className="heroCopy"><span>{isHistory?"HISTORICAL HISTORY":"MYTHOLOGICAL HISTORY"}</span><h1>{current.title}</h1><p>{current.text}</p>
-     <div className="heroStats"><span><BookOpen/> {count} Stories</span><span><Landmark/> {isHistory?"Eras & Events":"Gods & Goddesses"}</span><span><ScrollText/> {isHistory?"Archives & Sources":"Folklore & Legends"}</span></div>
+   <section className="explorerHero" style={{backgroundImage:"linear-gradient(90deg,rgba(15,15,14,.92),rgba(15,15,14,.22)),url("+visual.hero+")"}}>
+    <div className="heroCopy"><span>{visual.eyebrow}</span><h1>{visual.title}</h1><p>{visual.text}</p>
+     <div className="heroStats"><span><BookOpen/> {topicCount} Stories</span>{visual.statLabels.map((s,i)=><span key={s}>{i===0?<Landmark/>:i===1?<Globe2/>:i===2?<Sparkles/>:<ScrollText/>} {s}</span>)}</div>
     </div>
    </section>
-   <section className="explorerToolbar"><div className="chipRow">{chips.map(c=><button className={active===c?"active":""} onClick={()=>setActive(c)} key={c}>{c}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
-   <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {current.title}</h2></div><span>{count} stories</span></div>
-    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={explorerImageFor(t)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".15"}}/><span className="cardBadge">{isHistory?t.era:t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+   <section className="explorerToolbar"><div className="chipRow">{chips.map(ch=><button className={active===ch?"active":""} onClick={()=>setActive(ch)} key={ch}>{ch}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
+   <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {visual.title}</h2></div><span>{topicCount} stories</span></div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".15"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
     {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
    </section>
   </div>
  </main></Layout>
 }
-
 function Collection(){
  const{type}=useParams(),isMyth=type==="mythology";
  const options=isMyth?categoryOptions.mythology:categoryOptions.history;
