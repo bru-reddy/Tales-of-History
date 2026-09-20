@@ -79,7 +79,58 @@ const explorerImages={
 "odin-ravens":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20riding%20Sleipnir.jpg?width=1200",
 "valhalla":"https://commons.wikimedia.org/wiki/Special:FilePath/Valhalla.jpg?width=1200"
 };
-const explorerImageFor=t=>explorerImages[t.slug]||imageFor(t);
+const categoryImagePools={
+ "Indian Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Krishna%20and%20Arjuna%20at%20Kurukshetra.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Nataraja%20at%20Chidambaram.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Ram%20Sita%20Lakshman%20Hanuman.jpg?width=1200"
+ ],
+ "Japanese Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Itsukushima%20Shrine%20Torii.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Fushimi%20Inari%20Taisha%20torii.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Mount%20Fuji%20from%20Lake%20Kawaguchi.jpg?width=1200"
+ ],
+ "Chinese Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Chinese%20dragon%20painting.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Forbidden%20City%20Beijing.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Chinese%20temple.jpg?width=1200"
+ ],
+ "Greek Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Apollo%20Belvedere.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Greek%20amphora.jpg?width=1200"
+ ],
+ "Roman Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum%20Rome.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon%20Rome.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20mosaic.jpg?width=1200"
+ ],
+ "Macedonian Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Vergina%20Sun.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Ancient%20Pella%20Macedonia.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Mount%20Olympus.jpg?width=1200"
+ ],
+ "Egyptian Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Sphinx%20of%20Giza%20and%20Pyramids.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Temple%20of%20Karnak.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Egyptian%20hieroglyphs.jpg?width=1200"
+ ],
+ "Norse Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Viking%20ships.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Norse%20mythology%20illustration.jpg?width=1200"
+ ],
+ "Celtic Mythology":[
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Newgrange%20Ireland.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Celtic%20cross%20Monasterboice.jpg?width=1200",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Cliffs%20of%20Moher.jpg?width=1200"
+ ]
+};
+const explorerImageFor=(t)=>{
+ if(explorerImages[t.slug])return explorerImages[t.slug];
+ const pool=categoryImagePools[t.subcategory];
+ return pool?pool[Math.abs((t.title||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0))%pool.length]:imageFor(t);
+};
 
 
 const categoryOptions={
