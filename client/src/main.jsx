@@ -134,7 +134,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
  };
  useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)})},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology"};
- const base=topics.filter(t=>isHistory?t.subcategory===current.title:(t.subcategory===map[current.slug]||(current.slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary))));
+ const base=topics.filter(t=>isHistory?t.subcategory===current.title:(current.slug==="folklore-legends"?t.category==="Mythology":t.subcategory===map[current.slug]||(current.slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary))));
  const chips=isHistory?["All","Ancient","Medieval","Empires","Rulers","Revolutions","Renaissance","Industrial Age","World Wars","Independence","Science & Culture"]:["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
  const filtered=base.filter(t=>{
    const hay=(t.title+" "+t.summary+" "+t.era+" "+(t.tags||[]).join(" ")).toLowerCase();
