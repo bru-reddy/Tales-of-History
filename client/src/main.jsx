@@ -265,10 +265,12 @@ function ExplorerPage({kind,slug:forcedSlug}){
   return matchQ&&matchChip;
  });
  const sidebarItems=isHistory
-  ?(current.slug==="indian-history"
-    ?[{heading:"Indian History",items:[["Ancient India","indian-history"],["Medieval India","indian-history"],["Modern India","indian-history"]]}]
-    :[{heading:"History Categories",items:categoryOptions.history.map(o=>[o.title,o.slug])},{heading:"Explore by Era",items:[["Ancient World","ancient"],["Medieval Era","medieval"],["Renaissance","renaissance"],["Industrial Age","industrial"],["World Wars","wars"],["Contemporary History","contemporary"]]}])
-  :[{heading:"Mythology Traditions",items:categoryOptions.mythology.map(o=>[o.title,o.slug])},{heading:"Explore by Theme",items:[["Creation","theme"],["Gods & Goddesses","theme"],["Heroes","theme"],["Folklore & Legends","theme"]]}];
+  ?[{heading:"History Categories",items:categoryOptions.history.map(o=>[o.title,o.slug])},
+    {heading:current.slug==="indian-history"?"Explore by Era":"Explore by Era",items:current.slug==="indian-history"
+      ?[["Ancient India","era"],["Medieval India","era"],["Modern India","era"]]
+      : [["Ancient World","era"],["Medieval Era","era"],["Renaissance","era"],["Industrial Age","era"],["World Wars","era"],["Contemporary History","era"]]}]
+  :[{heading:"Mythology Traditions",items:categoryOptions.mythology.map(o=>[o.title,o.slug])},
+    {heading:"Explore by Theme",items:[["Creation","theme"],["Gods & Goddesses","theme"],["Heroes","theme"],["Folklore & Legends","theme"]]}];
  const topicCount=loading?"…":filtered.length;
  return <Layout><main className="explorer">
   <aside className="explorerSide">
@@ -276,7 +278,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
    {sidebarItems.map((section,si)=><div className="sideSection" key={section.heading}>
     <h3>{section.heading}</h3>
     {section.items.map(([label,target])=>{
-      const isCategory=target!=="theme"&&target!=="ancient"&&target!=="medieval"&&target!=="renaissance"&&target!=="industrial"&&target!=="wars"&&target!=="contemporary";
+      const isCategory=target!=="theme"&&target!=="era";
       const href=isCategory?(isHistory?"/history/"+target:"/mythology/"+target):"#";
       return <a key={label} href={href} className={"sideOption "+(label===current.title?"active":"")} onClick={e=>{if(!isCategory)e.preventDefault()}}><span className="sideIcon">{isHistory?(si===0?(label.includes("International")?"◉":"♜"):"◌"):"✦"}</span><span>{label}</span></a>
     })}
