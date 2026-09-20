@@ -11,7 +11,7 @@ async function api(p,o={}){
  let d={};try{d=await r.json()}catch{}
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
-async function getTopics(){try{const d=await api("/topics");return Array.isArray(d)&&d.length?d:staticTopics}catch{return staticTopics}}
+async function getTopics(){try{const d=await api("/topics");return Array.isArray(d)&&d.length>=80?d:staticTopics}catch{return staticTopics}}
 async function getTopic(slug){try{return await api("/topics/"+slug)}catch{return staticTopics.find(x=>x.slug===slug)}}
 function Layout({children}){
  const[open,setOpen]=useState(false);
