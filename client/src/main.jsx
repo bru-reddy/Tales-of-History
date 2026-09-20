@@ -48,7 +48,7 @@ const storyImages={
  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1200",
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
-const imageFor=(t)=>storyImages[t.slug]||t.image;
+const imageFor=(t)=>accurateTopicImages[t.slug]||storyImages[t.slug]||categoryFallbackImages[t.subcategory?.toLowerCase?.()||""]||t.image;
 const explorerImages={
 "izanagi-izanami":"https://commons.wikimedia.org/wiki/Special:FilePath/Izanagi_and_Izanami.jpg?width=1200",
 "susanoo-yamata":"https://commons.wikimedia.org/wiki/Special:FilePath/Susanoo%20and%20Yamata%20no%20Orochi.jpg?width=1200",
@@ -294,21 +294,21 @@ const accurateTopicImages={
 
 const categoryFallbackImages={
  "indian-history":storyImages["vijayanagara"],
- "international-history":commons("Roman Forum Rome September 2014 02.jpg"),
+ "international-history":commons("Alexander the Great mosaic.jpg"),
  "japanese-mythology":commons("Amaterasu.png"),
- "chinese-mythology":commons("Eight Immortals.jpg"),
- "greek-mythology":commons("The Parthenon in Athens.jpg"),
- "roman-mythology":commons("Roman Forum Rome September 2014 02.jpg"),
- "macedonian-mythology":commons("Vergina -- Tomb of Philip II.jpg"),
+ "chinese-mythology":commons("Chen Rong - Nine Dragons (dragons only).jpg"),
+ "greek-mythology":commons("Akhilleus Aias Staatliche Antikensammlungen 1417.jpg"),
+ "roman-mythology":commons("Roman mosaic panel of Venus on a boat crowning herself accompanied by six female dwarves on boats, dated to the late 4th century AD, from Carthage, National Museum of Bardo, Tunisia (54424162905).jpg"),
+ "macedonian-mythology":commons("Vergina Sun WIPO.svg"),
  "egyptian-mythology":commons("All Gizah Pyramids.jpg"),
- "norse-mythology":commons("Yggdrasil.jpg"),
- "celtic-mythology":commons("Newgrange Ireland.jpg"),
- "folklore-legends":commons("Newgrange Ireland.jpg")
+ "norse-mythology":commons("Odin by Georg von Rosen, 1881.jpg"),
+ "celtic-mythology":commons("Riders of the Sidhe.jpg"),
+ "folklore-legends":commons("Riders of the Sidhe.jpg")
 };
 
 const topicImageFor=(t,slug)=>{
  const explicit=accurateTopicImages[t.slug];
- return explicit||t.image||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
+ return explicit||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
 };
 
 function Home(){
@@ -336,7 +336,15 @@ function ExplorerPage({kind,slug:forcedSlug}){
  const visual=categoryVisuals[current.slug]||categoryVisuals["international-history"];
  useEffect(()=>{setLoading(true);api("/topics").then(d=>{setTopics(d);setLoading(false)}).catch(()=>setLoading(false))},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology","celtic-mythology":"Celtic Mythology"};
- const base=topics.filter(t=>isHistory?t.subcategory===current.title:(current.slug==="folklore-legends"?t.category==="Mythology":t.subcategory===map[current.slug]||(current.slug==="macedonian-mythology"&&/Alexander|Macedon/i.test(t.title+" "+t.summary))));
+ const base=topics.filter(t=>{
+  if(isHistory)return t.subcategory===current.title;
+  if(current.slug==="folklore-legends"){
+    const tags=String(t.tags||[]).toLowerCase();
+    const hay=(t.title+" "+t.summary+" "+t.era+" "+tags).toLowerCase();
+    return t.category==="Mythology" && /folklore|legend|yokai|spirit|monster|demon|fairy|heroic tale/.test(hay);
+  }
+  return t.subcategory===map[current.slug];
+});
  const chips=isHistory
   ?(current.slug==="indian-history"?["All","Indus Valley","Vedic Age","Mahajanapadas","Empires","Philosophy & Religion","Science & Knowledge","Culture & Society"]:["All","Ancient World","Medieval Era","Renaissance","Industrial Age","World Wars","Contemporary","Empires","Culture & Society"])
   :["All","Creation","Gods & Goddesses","Heroes","Yokai (Spirits)","Demons (Oni)","Folklore","Love & Tragedy","Moral Tales"];
