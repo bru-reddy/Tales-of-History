@@ -22,7 +22,7 @@ function HistorySplash({onDone}){
  return <div className="historySplash"><div className="splashOrnament"><div className="orbit orbit1"></div><div className="orbit orbit2"></div><Landmark size={46}/></div><span>THE TALES OF HISTORY</span><b>The past is opening...</b><div className="splashLine"><i/></div></div>
 }
 
-const commons=(file,width=1200)=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width="+width;
+const commons=(file,width=1200)=>"https://images.weserv.nl/?url=ssl:commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"&w="+width+"&q=85";
 const storyImages={
  "shiva":"https://commons.wikimedia.org/wiki/Special:FilePath/India_statue_of_nataraja.jpg?width=1200",
  "ramayana":"https://commons.wikimedia.org/wiki/Special:FilePath/Rama%2C%20Sita%2C%20Lakshmana%2C%20and%20Hanuman.jpg?width=1200",
