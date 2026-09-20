@@ -316,7 +316,7 @@ const categoryFallbackImages={
 
 const topicImageFor=(t,slug)=>{
  const explicit=accurateTopicImages[t.slug];
- return explicit||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
+ return explicit||t.image||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
 };
 
 function Home(){
