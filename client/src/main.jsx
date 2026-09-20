@@ -19,6 +19,7 @@ function HistorySplash({onDone}){
  return <div className="historySplash"><div className="splashOrnament"><div className="orbit orbit1"></div><div className="orbit orbit2"></div><Landmark size={46}/></div><span>THE TALES OF HISTORY</span><b>The past is opening...</b><div className="splashLine"><i/></div></div>
 }
 
+const commons=(file,width=1200)=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width="+width;
 const storyImages={
  "shiva":"https://commons.wikimedia.org/wiki/Special:FilePath/India_statue_of_nataraja.jpg?width=1200",
  "ramayana":"https://commons.wikimedia.org/wiki/Special:FilePath/Rama%2C%20Sita%2C%20Lakshmana%2C%20and%20Hanuman.jpg?width=1200",
@@ -170,7 +171,6 @@ const categoryVisuals={
  "celtic-mythology":{eyebrow:"CELTIC MYTHOLOGY",title:"Celtic Mythology",text:"Explore Celtic gods, heroes, fae, sacred places and folklore from Ireland, Britain and related traditions.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Newgrange%20Ireland.jpg?width=1800",statLabels:["Gods & Heroes","Fae & Spirits","Sacred Places"],quote:"Where legend lives in landscape and memory."},
  "folklore-legends":{eyebrow:"FOLKLORE & LEGENDS",title:"Folklore & Legends",text:"Discover legendary heroes, spirits, monsters, tricksters and folk traditions passed between generations around the world.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Cliffs%20of%20Moher.jpg?width=1800",statLabels:["Heroes & Tricksters","Spirits & Monsters","Folk Traditions"],quote:"Every generation leaves a story behind."}
 };
-const commons=(file,width=1200)=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width="+width;
 
 const accurateTopicImages={
  // Indian History
