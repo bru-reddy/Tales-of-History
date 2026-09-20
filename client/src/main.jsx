@@ -151,7 +151,9 @@ const categoryOptions={
   {slug:"roman-mythology",title:"Roman Mythology",icon:"SPQR",text:"Roman gods, founding legends and stories shaped by Roman religious culture."},
   {slug:"macedonian-mythology",title:"Macedonian Mythology",icon:"☀",text:"Ancient Macedonian religious traditions, legends and the mythic world around Macedon."},
   {slug:"egyptian-mythology",title:"Egyptian Mythology",icon:"☥",text:"Ra, Osiris, Isis, Horus and the rich cosmology of ancient Egypt."},
-  {slug:"norse-mythology",title:"Norse Mythology",icon:"ᛟ",text:"Odin, Thor, Loki, Yggdrasil and Ragnarök from Scandinavian traditions."},\n  {slug:"celtic-mythology",title:"Celtic Mythology",icon:"☘",text:"Celtic gods, heroes, fae, sacred places and folklore from Ireland, Britain and related traditions."},\n  {slug:"folklore-legends",title:"Folklore & Legends",icon:"♧",text:"Legendary heroes, spirits, monsters, tricksters and folk traditions from around the world."}
+  {slug:"norse-mythology",title:"Norse Mythology",icon:"ᛟ",text:"Odin, Thor, Loki, Yggdrasil and Ragnarök from Scandinavian traditions."},
+  {slug:"celtic-mythology",title:"Celtic Mythology",icon:"☘",text:"Celtic gods, heroes, fae, sacred places and folklore from Ireland, Britain and related traditions."},
+  {slug:"folklore-legends",title:"Folklore & Legends",icon:"♧",text:"Legendary heroes, spirits, monsters, tricksters and folk traditions from around the world."}
  ]};
 
 function Home(){
