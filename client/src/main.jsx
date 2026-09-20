@@ -182,37 +182,145 @@ const categoryVisuals={
  "celtic-mythology":{eyebrow:"CELTIC MYTHOLOGY",title:"Celtic Mythology",text:"Explore Celtic gods, heroes, fae, sacred places and folklore from Ireland, Britain and related traditions.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Newgrange%20Ireland.jpg?width=1800",statLabels:["Gods & Heroes","Fae & Spirits","Sacred Places"],quote:"Where legend lives in landscape and memory."},
  "folklore-legends":{eyebrow:"FOLKLORE & LEGENDS",title:"Folklore & Legends",text:"Discover legendary heroes, spirits, monsters, tricksters and folk traditions passed between generations around the world.",hero:"https://commons.wikimedia.org/wiki/Special:FilePath/Cliffs%20of%20Moher.jpg?width=1800",statLabels:["Heroes & Tricksters","Spirits & Monsters","Folk Traditions"],quote:"Every generation leaves a story behind."}
 };
-const categoryCardImages={
- "indian-history":[storyImages["chola-empire"],storyImages["vedic-age"],storyImages["mahabharata"],storyImages["buddha"],storyImages["jainism"],storyImages["vijayanagara"]],
- "international-history":[
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Ziggurat%20of%20Ur.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/All%20Gizah%20Pyramids.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Persepolis.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20the%20Great%20mosaic.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Great%20Wall%20of%20Han%20Dynasty.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Chichen%20Itz%C3%A1%20Pyramide.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Angkor%20Wat.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Stonehenge%20at%20sunset.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Knights%20of%20the%20Holy%20Ghost%20embarking%20on%20the%20crusades.jpg?width=1200",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Mona%20Lisa%2C%20by%20Leonardo%20da%20Vinci%2C%20from%20C2RMF%20retouched.jpg?width=1200"
- ],
- "japanese-mythology":[explorerImages["izanagi-izanami"],explorerImages["susanoo-yamata"],explorerImages["amaterasu-cave"],explorerImages["momotaro"],categoryImagePools["Japanese Mythology"][0],categoryImagePools["Japanese Mythology"][1]],
- "chinese-mythology":[explorerImages["pangu-nuwa"],explorerImages["chang-e"],explorerImages["monkey-king"],categoryImagePools["Chinese Mythology"][0],categoryImagePools["Chinese Mythology"][1],categoryImagePools["Chinese Mythology"][2]],
- "greek-mythology":[explorerImages["perseus-medusa"],explorerImages["orpheus"],explorerImages["icarus"],explorerImages["jason-golden-fleece"],categoryImagePools["Greek Mythology"][0],categoryImagePools["Greek Mythology"][1]],
- "roman-mythology":[explorerImages["romulus-remus"],explorerImages["venus-rome"],explorerImages["janus-new-year"],categoryImagePools["Roman Mythology"][0],categoryImagePools["Roman Mythology"][1],categoryImagePools["Roman Mythology"][2]],
- "macedonian-mythology":[storyImages["alexander"],categoryImagePools["Macedonian Mythology"][0],categoryImagePools["Macedonian Mythology"][1],categoryImagePools["Macedonian Mythology"][2]],
- "egyptian-mythology":[explorerImages["thoth"],explorerImages["anubis"],explorerImages["book-of-dead"],categoryImagePools["Egyptian Mythology"][0],categoryImagePools["Egyptian Mythology"][1],categoryImagePools["Egyptian Mythology"][2]],
- "norse-mythology":[explorerImages["thor-hammer"],explorerImages["baldur"],explorerImages["odin-ravens"],explorerImages["valhalla"],categoryImagePools["Norse Mythology"][0],categoryImagePools["Norse Mythology"][1]],
- "celtic-mythology":[categoryImagePools["Celtic Mythology"][0],categoryImagePools["Celtic Mythology"][1],categoryImagePools["Celtic Mythology"][2],storyImages["greek-mythology"],storyImages["norse-mythology"]],
- "folklore-legends":[storyImages["greek-mythology"],storyImages["norse-mythology"],storyImages["egypt-osiris"],categoryImagePools["Celtic Mythology"][0],categoryImagePools["Greek Mythology"][2]]
+const commons=(file,width=1200)=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width="+width;
+
+const accurateTopicImages={
+ // Indian History
+ "vedic-age":commons("Vedic Period India.jpg"),
+ "mahajanapadas":commons("Mahajanapadas (c. 500 BCE).png"),
+ "buddha":commons("Buddha in Sarnath Museum (Dhammajak Mutra).jpg"),
+ "jainism":commons("Statue of Mahavira at Sri Mahavirji.jpg"),
+ "gupta-empire":commons("Ajanta Cave 26.jpg"),
+ "sangam-age":commons("Ancient Tamil scripture.jpg"),
+ "chola-empire":commons("Brihadeeswarar Temple full.jpg"),
+ "delhi-sultanate":commons("Alai Darwaza, Qutb complex Delhi.jpg"),
+ "vijayanagara":commons("Vittala Temple Hampi.jpg"),
+ "mughal-empire":commons("Taj Mahal in March 2018.jpg"),
+ "maratha-confederacy":commons("Shivaji statue.jpg"),
+ "revolt-1857":commons("Rani Lakshmibai statue Jhansi.jpg"),
+ "indian-national-movement":commons("Gandhi spinning.jpg"),
+ "non-cooperation":commons("Mahatma Gandhi 1921.jpg"),
+ "dandi-march":commons("Gandhi Dandi March.jpg"),
+ "quit-india":commons("Quit India Movement.jpg"),
+ "independence-partition":commons("Indian Independence Day 1947.jpg"),
+
+ // International History
+ "mesopotamia":commons("Ziggurat of Ur.jpg"),
+ "ancient-egypt":commons("All Gizah Pyramids.jpg"),
+ "persian-empire":commons("Persepolis.jpg"),
+ "ancient-greece":commons("The Parthenon in Athens.jpg"),
+ "alexander":commons("Alexander the Great mosaic.jpg"),
+ "roman-republic":commons("Roman Forum Rome September 2014 02.jpg"),
+ "roman-empire":commons("Colosseum in Rome, Italy - April 2008.jpg"),
+ "qin-han-china":commons("Terracotta Army.jpg"),
+ "silk-road":commons("Dunhuang Mogao Caves.jpg"),
+ "maya":commons("Chichen Itza 3.jpg"),
+ "aztec":commons("Templo Mayor.jpg"),
+ "inca":commons("Machu Picchu.png"),
+ "crusades":commons("Knights of the Holy Ghost embarking on the crusades.jpg"),
+ "black-death":commons("The Triumph of Death.jpg"),
+ "scientific-revolution":commons("Galileo facing the Roman Inquisition.jpg"),
+ "american-revolution":commons("Washington Crossing the Delaware by Emanuel Leutze.jpg"),
+ "french-revolution":commons("Storming of the Bastille.jpg"),
+ "russian-revolution":commons("Russian Revolution of 1917.jpg"),
+ "cold-war":commons("BerlinWall.jpg"),
+ "space-race":commons("Apollo 11 launch.jpg"),
+ "nile-civilization":commons("All Gizah Pyramids.jpg"),
+ "industrial-revolution-2":commons("Loutherbourg, Coalbrookdale by Night.jpg"),
+ "world-war-i":commons("WWI trenches in France.jpg"),
+ "world-war-ii":commons("Normandy American Cemetery and Memorial 2.jpg"),
+
+ // Mythology — use primary-source/artifact/depiction imagery rather than unrelated category stock.
+ "greek-iliad":commons("Achilles and Ajax playing a game.jpg"),
+ "odyssey":commons("Odysseus and Polyphemus, Proto-Attic neck amphora, ca 650 BC, AM Eleusis, 081141.jpg"),
+ "prometheus":commons("Prometheus Bound.jpg"),
+ "heracles":commons("Heracles.jpg"),
+ "theseus":commons("Theseus Minotaur Ramey Tuileries.jpg"),
+ "zeus-cronus":commons("Cronus Devouring His Son by Goya.jpg"),
+ "athena-birth":commons("Birth of Athena.jpg"),
+ "theseus-minotaur":commons("Theseus Minotaur Louvre CA3837.jpg"),
+ "heracles-labors":commons("Heracles.jpg"),
+ "odysseus-cyclops":commons("Odysseus and Polyphemus, Proto-Attic neck amphora, ca 650 BC, AM Eleusis, 081141.jpg"),
+ "hades-persephone":commons("Hades and Persephone, Vergina.jpg"),
+ "hydra":commons("Hercules and the Lernaean Hydra.jpg"),
+ "echo-narcissus":commons("Echo and Narcissus.jpg"),
+
+ "egypt-osiris":commons("Osiris, Isis and Horus.jpg"),
+ "egypt-ra":commons("Ra-Horakhty.jpg"),
+ "ra-solar-bark":commons("Solar barque of Ra.jpg"),
+ "horus-seth":commons("Horus and Seth.jpg"),
+ "sekmet":commons("Sekhmet.jpg"),
+
+ "gilgamesh":commons("The Epic of Gilgamesh.jpg"),
+
+ "ragnarok":commons("Ragnarok by Emil Doepler.jpg"),
+ "yggdrasil":commons("Yggdrasil.jpg"),
+ "odin":commons("Odin by Georg von Rosen, 1881.jpg"),
+ "loki-children":commons("Loki and his children.jpg"),
+ "heimdall":commons("Heimdall.jpg"),
+
+ "ramayana":storyImages["ramayana"],
+ "mahabharata":storyImages["mahabharata"],
+ "krishna":storyImages["krishna"],
+ "shiva":storyImages["shiva"],
+ "durga-mahishasura":commons("Durga Mahishasura.jpg"),
+ "kali-raktabija":commons("Kali and Raktabija.jpg"),
+ "garuda-naga":commons("Garuda and Nagas.jpg"),
+ "savitri-satyavan":commons("Savitri and Satyavan.jpg"),
+ "nachiketa-yama":commons("Nachiketa and Yama.jpg"),
+
+ "amaterasu":commons("Amaterasu.png"),
+ "tsukuyomi":commons("Tsukuyomi.jpg"),
+ "kaguya-hime":commons("Kaguya-hime.jpg"),
+ "kitsune":commons("Kitsune.jpg"),
+ "oni":commons("Oni.jpg"),
+ "yuki-onna":commons("Yuki-onna.jpg"),
+ "rokurokubi":commons("Rokurokubi.jpg"),
+ "bakeneko":commons("Bakeneko.jpg"),
+ "tengu":commons("Tengu.jpg"),
+ "kappa":commons("Kappa.jpg"),
+ "ubume":commons("Ubume.jpg"),
+
+ "jingwei":commons("Jingwei.jpg"),
+ "white-snake":commons("Legend of the White Snake.jpg"),
+ "eight-immortals":commons("Eight Immortals.jpg"),
+ "dragon-kings":commons("Dragon Kings of Four Seas.jpg"),
+ "jiangshi":commons("Jiangshi.jpg"),
+ "fox-spirit-huli-jing":commons("Huli jing.jpg"),
+
+ "aeneas-dido":commons("Aeneas and Dido.jpg"),
+ "mars-venus":commons("Mars and Venus Pompeii.jpg"),
+ "pluto-proserpina":commons("Pluto and Proserpina.jpg"),
+ "lares-penates":commons("Lararium Pompeii.jpg"),
+
+ "celtic-mythology":commons("Newgrange Ireland.jpg"),
+ "celtic-cuchulainn":commons("Cuchulainn.jpg"),
+ "celtic-fionn":commons("Fionn mac Cumhaill.jpg"),
+ "celtic-banshee":commons("Banshee.jpg"),
+ "celtic-puca":commons("Púca.jpg"),
+ "celtic-leprechaun":commons("Leprechaun.jpg"),
+
+ "arthurian":commons("King Arthur statue.jpg"),
+ "beowulf":commons("Beowulf manuscript.jpg")
 };
+
+const categoryFallbackImages={
+ "indian-history":storyImages["vijayanagara"],
+ "international-history":commons("Roman Forum Rome September 2014 02.jpg"),
+ "japanese-mythology":commons("Amaterasu.png"),
+ "chinese-mythology":commons("Eight Immortals.jpg"),
+ "greek-mythology":commons("The Parthenon in Athens.jpg"),
+ "roman-mythology":commons("Roman Forum Rome September 2014 02.jpg"),
+ "macedonian-mythology":commons("Vergina -- Tomb of Philip II.jpg"),
+ "egyptian-mythology":commons("All Gizah Pyramids.jpg"),
+ "norse-mythology":commons("Yggdrasil.jpg"),
+ "celtic-mythology":commons("Newgrange Ireland.jpg"),
+ "folklore-legends":commons("Newgrange Ireland.jpg")
+};
+
 const topicImageFor=(t,slug)=>{
- const explicit=explorerImages[t.slug];
- if(explicit)return explicit;
- const pool=categoryCardImages[slug]||categoryCardImages["international-history"];
- return pool[Math.abs(String(t.slug||t.title||"").split("").reduce((a,ch)=>a+ch.charCodeAt(0),0))%pool.length];
+ const explicit=accurateTopicImages[t.slug];
+ return explicit||t.image||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
 };
 
 function Home(){
@@ -293,7 +401,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
    </section>
    <section className="explorerToolbar"><div className="chipRow">{chips.map(ch=><button className={active===ch?"active":""} onClick={()=>setActive(ch)} key={ch}>{ch}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
    <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {visual.title}</h2></div><span>{topicCount} stories</span></div>
-    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".15"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{const fallback=categoryFallbackImages[current.slug]||categoryFallbackImages["international-history"];if(e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".12"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
     {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
    </section>
   </div>
