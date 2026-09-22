@@ -3,9 +3,16 @@ services:
     runtime: static
     name: tales-of-history-frontend
     rootDir: client
-    buildCommand: npm ci && npm run build
+    buildCommand: rm -rf dist && npm ci && npm run build
     staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
+    headers:
+      - path: /
+        name: Cache-Control
+        value: "no-store, no-cache, must-revalidate, max-age=0"
+      - path: /index.html
+        name: Cache-Control
+        value: "no-store, no-cache, must-revalidate, max-age=0"
