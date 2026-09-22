@@ -42,6 +42,9 @@ As the story moves forward, its consequences become visible in new political arr
 Today, ${t.title} remains important because it helps us ask how people understood their world, what choices they made, and how those choices shaped what came after. Where the evidence is uncertain, this story keeps that uncertainty visible rather than turning it into a simple fact.`)}));
 export async function seedDatabase(){
  for(const topic of detailed){
+  if(!topic.image||typeof topic.image!=="string"||!topic.image.trim()){
+   throw new Error("Story "+topic.slug+" is missing a required related image");
+  }
   await Topic.updateOne({slug:topic.slug},{$set:topic},{upsert:true});
  }
 }
