@@ -3,7 +3,7 @@ import{createRoot}from"react-dom/client";
 import{BrowserRouter,Link,Route,Routes,useNavigate,useParams}from"react-router-dom";
 import{Bell,BookOpen,ChevronDown,ChevronRight,Clock3,Globe2,Landmark,Menu,Search,Sparkles,ScrollText,Shield,Star,UserRound,X}from"lucide-react";
 import"./styles.css";
-import fallbackTopics from"./staticTopics.js";
+import topicFallback from"./staticTopics.js";
 
 const API=import.meta.env.VITE_API_URL||"http://localhost:5000/api";
 async function api(p,o={}){
@@ -11,8 +11,8 @@ async function api(p,o={}){
  let d={};try{d=await r.json()}catch{}
  if(!r.ok)throw Error(d.message||"Request failed");return d;
 }
-async function getTopics(){try{const d=await api("/topics");return Array.isArray(d)&&d.length>=80?d:fallbackTopics}catch{return fallbackTopics}}
-async function getTopic(slug){try{return await api("/topics/"+slug)}catch{return fallbackTopics.find(x=>x.slug===slug)}}
+async function getTopics(){try{const d=await api("/topics");return Array.isArray(d)&&d.length>=80?d:topicFallback}catch{return topicFallback}}
+async function getTopic(slug){try{return await api("/topics/"+slug)}catch{return topicFallback.find(x=>x.slug===slug)}}
 function Layout({children}){
  const[open,setOpen]=useState(false);
  return <div className="app"><header className="topHeader"><Link to="/" className="brand brandPro"><span className="mark"><Landmark size={21}/></span><span><b>Tales of History</b><small>Stories That Shaped Our World</small></span></Link><button className="mobileBtn" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav className={"topNav "+(open?"open":"")}><Link to="/">Home</Link><Link to="/collection/history">History</Link><Link to="/collection/mythology">Mythology</Link><Link to="/timeline">Timeline</Link><Link to="/about">About</Link><button className="iconNav" type="button" aria-label="Search"><Search size={20}/></button><button className="iconNav" type="button" aria-label="Notifications"><Bell size={19}/></button></nav></header>{children}<footer><div><b>The Tales of History</b><span>Read the past. Explore the story. Understand the world.</span></div><span>Interactive history & mythology library</span></footer></div>
@@ -341,7 +341,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
  const options=isHistory?categoryOptions.history:categoryOptions.mythology;
  const current=options.find(x=>x.slug===slug)||options[0];
  const visual=categoryVisuals[current.slug]||categoryVisuals["international-history"];
- useEffect(()=>{setLoading(true);getTopics().then(d=>{setTopics(d);setLoading(false)}).catch(()=>{setTopics(fallbackTopics);setLoading(false)})},[slug]);
+ useEffect(()=>{setLoading(true);getTopics().then(d=>{setTopics(d);setLoading(false)}).catch(()=>{setTopics(topicFallback);setLoading(false)})},[slug]);
  const map={"indian-mythology":"Indian Mythology","japanese-mythology":"Japanese Mythology","chinese-mythology":"Chinese Mythology","greek-mythology":"Greek Mythology","roman-mythology":"Roman Mythology","macedonian-mythology":"Macedonian Mythology","egyptian-mythology":"Egyptian Mythology","norse-mythology":"Norse Mythology","celtic-mythology":"Celtic Mythology"};
  const base=topics.filter(t=>{
   if(isHistory)return t.subcategory===current.title;
