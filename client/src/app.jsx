@@ -52,7 +52,7 @@ const storyImages={
  "norse-mythology":"https://commons.wikimedia.org/wiki/Special:FilePath/Odin%20by%20Georg%20von%20Rosen%2C%201881.jpg?width=1200",
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
-const imageFor=(t)=>accurateTopicImages[t.slug]||t.image||storyImages[t.slug]||categoryFallbackImages[t.subcategory?.toLowerCase?.()||""]||categoryFallbackImages["international-history"];
+const imageFor=(t)=>accurateTopicImages[t.slug]||t.image||storyImages[t.slug]||"";
 const explorerImages={
 "izanagi-izanami":"https://commons.wikimedia.org/wiki/Special:FilePath/Izanagi_and_Izanami.jpg?width=1200",
 "susanoo-yamata":commons("YamataNoOrochi.jpg"),
@@ -126,7 +126,7 @@ const categoryImagePools={
 const explorerImageFor=(t)=>{
  if(explorerImages[t.slug])return explorerImages[t.slug];
  const pool=categoryImagePools[t.subcategory];
- return pool?pool[Math.abs((t.title||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0))%pool.length]:imageFor(t);
+ return imageFor(t);
 };
 
 
@@ -316,7 +316,7 @@ const categoryFallbackImages={
 
 const topicImageFor=(t,slug)=>{
  const explicit=accurateTopicImages[t.slug];
- return explicit||t.image||categoryFallbackImages[slug]||categoryFallbackImages["international-history"];
+ return explicit||t.image||"";
 };
 
 function Home(){
@@ -329,7 +329,7 @@ function Home(){
    <Link className="categoryCard historyCard" to="/collection/history"><div className="categoryIcon"><Landmark/></div><div><span className="label">HISTORY</span><h3>History</h3><p>Indian and international history, organized into eras, timelines and connected stories.</p></div><ChevronRight/></Link>
    <Link className="categoryCard mythologyCard" to="/collection/mythology"><div className="categoryIcon"><Star/></div><div><span className="label">MYTHOLOGY</span><h3>Mythological History</h3><p>Explore mythic traditions from India, Japan, China, Greece, Rome, Macedon, Egypt and the Norse world.</p></div><ChevronRight/></Link>
   </div></section>
-  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{const fallback=x.image||categoryFallbackImages[x.subcategory]||categoryFallbackImages["international-history"];if(fallback&&e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".35"}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
+  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".18";e.currentTarget.alt=x.title+" — image unavailable";}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
   <section className="journeyBanner"><div><span className="kicker">READ IT LIKE A STORY</span><h2>Not just facts. A journey through time.</h2><p>Every story has a beginning, turning points, people, consequences and a world around it.</p></div><Link className="pill" to="/timeline"><Clock3 size={16}/> Walk the timeline</Link></section>
  </main></Layout>
 }
@@ -420,7 +420,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
    </section>
    <section className="explorerToolbar"><div className="chipRow">{chips.map(ch=><button className={active===ch?"active":""} onClick={()=>setActive(ch)} key={ch}>{ch}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
    <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {visual.title}</h2></div><span>{topicCount} stories</span></div>
-    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{const fallback=t.image||categoryFallbackImages[current.slug]||categoryFallbackImages["international-history"];if(fallback&&e.currentTarget.src!==fallback)e.currentTarget.src=fallback;else e.currentTarget.style.opacity=".35"}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".18";e.currentTarget.alt=t.title+" — image unavailable";}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
     {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
    </section>
   </div>
