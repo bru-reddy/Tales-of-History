@@ -40,7 +40,7 @@ const storyImages={
  "dandi-march":"https://commons.wikimedia.org/wiki/Special:FilePath/Gandhi%20Dandi%20March.jpg?width=1200",
  "independence-partition":"https://commons.wikimedia.org/wiki/Special:FilePath/Indian%20Independence%20Day%201947.jpg?width=1200",
  "mesopotamia":"https://commons.wikimedia.org/wiki/Special:FilePath/Ziggurat%20of%20Ur.jpg?width=1200",
- "ancient-egypt":"https://commons.wikimedia.org/wiki/Special:FilePath/AbuSimbelTempleR2Statue.jpg",
+ "ancient-egypt":"https://commons.wikimedia.org/wiki/Special:FilePath/All%20Gizah%20Pyramids.jpg?width=1200",
  "ancient-greece":"https://commons.wikimedia.org/wiki/Special:FilePath/Parthenon%20in%20Athens.jpg?width=1200",
  "alexander":"https://commons.wikimedia.org/wiki/Special:FilePath/Alexander%20the%20Great%20mosaic.jpg?width=1200",
  "roman-republic":"https://commons.wikimedia.org/wiki/Special:FilePath/Roman%20Forum%20Rome%20September%202014%2002.jpg?width=1200",
@@ -53,6 +53,25 @@ const storyImages={
  "egypt-osiris":"https://commons.wikimedia.org/wiki/Special:FilePath/Osiris%2C%20Egyptian%20god.jpg?width=1200"
 };
 const imageFor=(t)=>accurateTopicImages[t.slug]||t.image||storyImages[t.slug]||"";
+const relatedImageCache=new Map();
+async function findRelatedImage(t){
+ const key=t.slug||t.title;
+ if(relatedImageCache.has(key))return relatedImageCache.get(key);
+ const query=[t.title,...(t.keyFigures||[]).slice(0,2),...(t.tags||[]).slice(0,2)].join(" ");
+ try{
+  const u="https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch="+encodeURIComponent(query)+"&gsrlimit=8&prop=imageinfo&iiprop=url&iiurlwidth=1200&format=json&origin=*";
+  const d=await fetch(u).then(r=>r.json());
+  const pages=Object.values(d.query?.pages||{});
+  const hit=pages.find(p=>p.imageinfo?.[0]?.thumburl||p.imageinfo?.[0]?.url);
+  const img=hit?.imageinfo?.[0]?.thumburl||hit?.imageinfo?.[0]?.url;
+  if(img){relatedImageCache.set(key,img);return img}
+ }catch{}
+ return "";
+}
+async function recoverStoryImage(t,img){
+ const src=await findRelatedImage(t);
+ if(src&&img){img.src=src;img.style.opacity="1";img.alt=t.title}
+}
 const explorerImages={
 "izanagi-izanami":"https://commons.wikimedia.org/wiki/Special:FilePath/Izanagi_and_Izanami.jpg?width=1200",
 "susanoo-yamata":commons("YamataNoOrochi.jpg"),
@@ -329,7 +348,7 @@ function Home(){
    <Link className="categoryCard historyCard" to="/collection/history"><div className="categoryIcon"><Landmark/></div><div><span className="label">HISTORY</span><h3>History</h3><p>Indian and international history, organized into eras, timelines and connected stories.</p></div><ChevronRight/></Link>
    <Link className="categoryCard mythologyCard" to="/collection/mythology"><div className="categoryIcon"><Star/></div><div><span className="label">MYTHOLOGY</span><h3>Mythological History</h3><p>Explore mythic traditions from India, Japan, China, Greece, Rome, Macedon, Egypt and the Norse world.</p></div><ChevronRight/></Link>
   </div></section>
-  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".18";e.currentTarget.alt=x.title+" — image unavailable";}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
+  <section className="section"><div className="sectionHead"><div><span className="kicker">STORY LIBRARY</span><h2>Stories waiting to be opened</h2></div><span>{f.length} stories</span></div><div className="grid">{f.slice(0,12).map(x=><Link className="card" to={"/topic/"+x.slug} key={x.slug}><div className="cardImg"><img src={imageFor(x)} alt={x.title} loading="lazy" onError={e=>{recoverStoryImage(x,e.currentTarget);}}/></div><div className="cardBody"><div className="meta"><span>{x.category}</span><span>{x.era}</span></div><h3>{x.title}</h3><p>{x.summary}</p><b>Open story →</b></div></Link>)}</div></section>
   <section className="journeyBanner"><div><span className="kicker">READ IT LIKE A STORY</span><h2>Not just facts. A journey through time.</h2><p>Every story has a beginning, turning points, people, consequences and a world around it.</p></div><Link className="pill" to="/timeline"><Clock3 size={16}/> Walk the timeline</Link></section>
  </main></Layout>
 }
@@ -420,7 +439,7 @@ function ExplorerPage({kind,slug:forcedSlug}){
    </section>
    <section className="explorerToolbar"><div className="chipRow">{chips.map(ch=><button className={active===ch?"active":""} onClick={()=>setActive(ch)} key={ch}>{ch}</button>)}</div><label className="explorerSearch"><Search size={17}/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search stories..."/></label></section>
    <section className="explorerStories"><div className="explorerTitle"><div><span className="kicker">STORY COLLECTION</span><h2>Stories from {visual.title}</h2></div><span>{topicCount} stories</span></div>
-    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{e.currentTarget.style.opacity=".18";e.currentTarget.alt=t.title+" — image unavailable";}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
+    <div className="storyCardGrid">{filtered.map(t=><Link className="explorerCard" to={"/topic/"+t.slug} key={t.slug}><div className="explorerCardImg"><img src={topicImageFor(t,current.slug)} alt={t.title} loading="lazy" onError={e=>{recoverStoryImage(t,e.currentTarget);}}/><span className="cardBadge">{t.era}</span></div><div className="explorerCardBody"><span className="cardType">{isHistory?(t.era||"HISTORY"):(t.tags?.[0]||"FOLKLORE").toUpperCase()}</span><h3>{t.title}</h3><p>{t.summary}</p><span className="openArrow">→</span></div></Link>)}</div>
     {!loading&&!filtered.length&&<div className="emptyState">No stories match this filter yet. Try “All” or another category.</div>}
    </section>
   </div>
