@@ -20,4 +20,4 @@ function showError(error){
 window.addEventListener("error",event=>showError(event.error||event.message));
 window.addEventListener("unhandledrejection",event=>showError(event.reason));
 
-import("./main.jsx").catch(showError);
+import("./app.jsx").catch(showError);
